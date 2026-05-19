@@ -1665,14 +1665,19 @@
       const category = document.createElement("span");
       const name = document.createElement("strong");
       const description = document.createElement("p");
-      const current = getSkillLevel(skill.id);
+      const current = getUpgradeLevel(skill);
+      const progress = createUpgradeProgress(current, skill.max);
       button.className = "upgrade-card";
       button.type = "button";
       button.dataset.rarity = skill.rarity || "common";
+      category.className = "upgrade-category";
+      name.className = "upgrade-name";
+      description.className = "upgrade-description";
       category.textContent = skill.category;
       name.textContent = skill.name;
-      description.textContent = skill.desc(current);
+      description.textContent = formatUpgradeDescription(skill.desc(current));
       button.append(category, name, description);
+      if (progress) button.append(progress);
       button.addEventListener("click", () => selectUpgrade(skill));
       ui.upgradeOptions.appendChild(button);
     });
@@ -1734,6 +1739,53 @@
       chosen.push(candidates.splice(index, 1)[0]);
     }
     return chosen;
+  }
+
+  function getUpgradeLevel(skill) {
+    if (skill.id?.startsWith("active-upgrade-")) return state.player.activeSkillLevel;
+    return getSkillLevel(skill.id);
+  }
+
+  function formatUpgradeDescription(text) {
+    const cleaned = text
+      .replace(/，?\s*目前等[級级]\s*\d+\s*\/\s*\d+。?/g, "。")
+      .replace(/。{2,}/g, "。")
+      .replace(/([。.!?])\s+/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!cleaned || /[。.!?]$/.test(cleaned)) return cleaned;
+    return `${cleaned}。`;
+  }
+
+  function createUpgradeProgress(current, max) {
+    const total = Number.isFinite(max) ? Math.floor(max) : 0;
+    if (total <= 0 || total > 8) return null;
+    const filled = clamp(Math.floor(current), 0, total);
+    const progress = document.createElement("div");
+    const header = document.createElement("div");
+    const label = document.createElement("span");
+    const value = document.createElement("strong");
+    const track = document.createElement("div");
+
+    progress.className = "upgrade-progress";
+    progress.setAttribute("aria-label", `目前等級 ${filled}/${total}`);
+    header.className = "upgrade-progress-header";
+    label.textContent = "等級";
+    value.textContent = `${filled}/${total}`;
+    track.className = "upgrade-progress-track";
+    track.style.setProperty("--segments", total);
+    track.setAttribute("aria-hidden", "true");
+
+    for (let index = 0; index < total; index++) {
+      const segment = document.createElement("span");
+      segment.className = "upgrade-progress-segment";
+      if (index < filled) segment.classList.add("is-filled");
+      track.appendChild(segment);
+    }
+
+    header.append(label, value);
+    progress.append(header, track);
+    return progress;
   }
 
   function getSkillLevel(id) {
