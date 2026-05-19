@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>星艦倖存者</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="gameShell" class="game-shell mode-menu">
+    <canvas id="gameCanvas" aria-label="星艦倖存者遊戲畫面"></canvas>
+    <div id="hudFrame" class="hud-frame" aria-hidden="true">
+      <span class="corner corner-tl"></span>
+      <span class="corner corner-tr"></span>
+      <span class="corner corner-bl"></span>
+      <span class="corner corner-br"></span>
+      <span class="scanline"></span>
+      <span class="reticle"></span>
+    </div>
+    <div id="damageVignette" class="damage-vignette" aria-hidden="true"></div>
+
+    <section id="hud" class="hud hidden" aria-live="polite">
+      <div class="hud-top">
+        <div class="brand-mark">星艦倖存者</div>
+        <div class="stat-line">
+          <span>時間 <strong id="timeValue">00:00</strong></span>
+          <span>擊殺 <strong id="killsValue">0</strong></span>
+          <span>等級 <strong id="levelValue">1</strong></span>
+          <span>分數 <strong id="scoreValue">0</strong></span>
+          <span>星域 <strong id="mapValue">--</strong></span>
+        </div>
+      </div>
+
+      <div class="hud-bottom">
+        <div class="meter-group">
+          <div class="meter-label"><span>艦體</span><strong id="hpText">100 / 100</strong></div>
+          <div class="meter"><div id="hpFill" class="meter-fill hp-fill"></div></div>
+        </div>
+        <div class="meter-group">
+          <div class="meter-label"><span>護盾</span><strong id="shieldText">60 / 60</strong></div>
+          <div class="meter"><div id="shieldFill" class="meter-fill shield-fill"></div></div>
+        </div>
+        <div class="meter-group active-meter-group">
+          <div class="meter-label"><span id="activeSkillName">主動技能未同步</span><strong id="activeSkillText">左鍵</strong></div>
+          <div class="meter"><div id="activeSkillFill" class="meter-fill active-fill"></div></div>
+        </div>
+        <div class="meter-group xp-meter-group">
+          <div class="meter-label"><span>同步經驗</span><strong id="xpText">0 / 20</strong></div>
+          <div class="meter"><div id="xpFill" class="meter-fill xp-fill"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menuOverlay" class="overlay overlay-open">
+      <div class="hero-panel">
+        <p class="eyebrow">NEON VOID SURVIVAL</p>
+        <h1>星艦倖存者</h1>
+        <p class="lead">駕駛最後一艘星艦，在霓虹星海中突破蜂群、升級武裝，挑戰虛空母艦。</p>
+        <div class="control-grid">
+          <span>鼠標指針牽引移動</span>
+          <span>自動瞄準，自動射擊</span>
+          <span>左鍵觸發主動技能</span>
+          <span>P / Esc 暫停</span>
+          <span>O 開啟遊戲設置</span>
+          <span>返回主選單可保留戰局</span>
+        </div>
+        <div class="menu-actions">
+          <button id="startButton" class="primary-button">開始新遊戲</button>
+          <button id="continueButton" class="secondary-button" disabled>繼續遊戲</button>
+          <button id="settingsButton" class="secondary-button">遊戲設置</button>
+        </div>
+        <div class="menu-records">
+          <span>最高分 <strong id="menuBestScore">0</strong></span>
+          <span>最長生存 <strong id="menuBestTime">00:00</strong></span>
+          <span>最高擊殺 <strong id="menuBestKills">0</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="levelOverlay" class="overlay hidden" aria-live="assertive">
+      <div class="level-panel">
+        <p class="eyebrow">SYSTEM UPGRADE</p>
+        <h2>選擇一項強化</h2>
+        <div id="upgradeOptions" class="upgrade-options"></div>
+      </div>
+    </section>
+
+    <section id="pauseOverlay" class="overlay hidden">
+      <div class="compact-panel">
+        <p class="eyebrow">PAUSED</p>
+        <h2>戰場暫停</h2>
+        <p>按 P 或 Esc 返回戰鬥，按 O 可快速開啟設置。</p>
+        <div class="menu-actions compact-actions">
+          <button id="resumeButton" class="primary-button">恢復作戰</button>
+          <button id="pauseSettingsButton" class="secondary-button">遊戲設置</button>
+          <button id="quitButton" class="secondary-button danger-button">返回主選單</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameOverOverlay" class="overlay hidden" aria-live="assertive">
+      <div class="result-panel">
+        <p class="eyebrow">MISSION REPORT</p>
+        <h2 id="resultTitle">艦體失效</h2>
+        <div id="resultStats" class="result-stats"></div>
+        <div class="menu-actions compact-actions">
+          <button id="restartButton" class="primary-button">重新出擊</button>
+          <button id="resultMenuButton" class="secondary-button">返回主選單</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settingsOverlay" class="overlay hidden">
+      <div class="settings-panel">
+        <p class="eyebrow">GAME SETTINGS</p>
+        <h2>遊戲設置</h2>
+        <div class="setting-list">
+          <label class="setting-row">
+            <span>音效音量</span>
+            <input id="volumeControl" type="range" min="0" max="100" value="55">
+          </label>
+          <label class="setting-row">
+            <span>畫質模式</span>
+            <select id="qualitySelect">
+              <option value="high">高畫質</option>
+              <option value="balanced">平衡</option>
+              <option value="performance">性能優先</option>
+            </select>
+          </label>
+          <label class="setting-row toggle-row">
+            <span>畫面震動</span>
+            <input id="shakeToggle" type="checkbox" checked>
+          </label>
+          <label class="setting-row toggle-row">
+            <span>動態掃描效果</span>
+            <input id="motionToggle" type="checkbox" checked>
+          </label>
+          <label class="setting-row toggle-row">
+            <span>自動降低特效壓力</span>
+            <input id="autoPerfToggle" type="checkbox" checked>
+          </label>
+        </div>
+        <div class="menu-actions compact-actions">
+          <button id="settingsBackButton" class="primary-button">返回</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast" class="toast hidden"></div>
+    <div id="eventLog" class="event-log" aria-live="polite"></div>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
