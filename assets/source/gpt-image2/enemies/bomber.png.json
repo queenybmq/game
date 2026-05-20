@@ -1,0 +1,25 @@
+{
+  "mode": "generate",
+  "model": "gpt-image-2-b",
+  "size_requested": "512x512",
+  "prompt": "top-down enemy spacecraft sprite for Explosive Swarm Drone, orange-red unstable hostile faction, spiked volatile core, compact aggressive silhouette, centered orthographic game asset on pure black background, no text, no UI, no frame",
+  "source": "url",
+  "output": "assets/source/gpt-image2/enemies/bomber.png",
+  "image": {
+    "format": "png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1137508
+  },
+  "created": 1779273358,
+  "usage": {
+    "total_tokens": 4218,
+    "input_tokens": 43,
+    "output_tokens": 4175,
+    "input_tokens_details": {
+      "text_tokens": 43,
+      "image_tokens": 0
+    }
+  },
+  "revised_prompt": ""
+}

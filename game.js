@@ -352,6 +352,20 @@
     swift: { color: "#ffd36a", chance: 0.055, hp: 0.78, speed: 1.28, xp: 1.2, score: 1.25 }
   };
 
+  const enemySpriteSources = {
+    hunter: "assets/images/enemies/hunter.webp",
+    tank: "assets/images/enemies/tank.webp",
+    shooter: "assets/images/enemies/shooter.webp",
+    bomber: "assets/images/enemies/bomber.webp",
+    wisp: "assets/images/enemies/wisp.webp",
+    burrower: "assets/images/enemies/burrower.webp",
+    stormer: "assets/images/enemies/stormer.webp",
+    sentinel: "assets/images/enemies/sentinel.webp",
+    elite: "assets/images/enemies/elite.webp",
+    boss: "assets/images/enemies/boss.webp"
+  };
+  const enemySpriteAssets = loadEnemySpriteAssets(enemySpriteSources);
+
   const maps = [
     { id: "nebula", nameKey: "map.nebula", colors: ["#173d71", "#071626", "#01040b"], accent: "#48f3ff", secondaryAccent: "#8defff", fog: "rgba(72, 243, 255, 0.16)", dust: "rgba(199, 247, 255, 0.18)", debrisColor: "rgba(141, 239, 255, 0.2)", glyphColor: "rgba(72, 243, 255, 0.16)", pattern: "nebula", enemyWeights: { wisp: 0.18 }, starTint: "#c7f7ff" },
     { id: "asteroid", nameKey: "map.asteroid", colors: ["#4a2e15", "#150d08", "#020202"], accent: "#ffd36a", secondaryAccent: "#c98743", fog: "rgba(255, 161, 82, 0.13)", dust: "rgba(255, 211, 106, 0.2)", debrisColor: "rgba(201, 135, 67, 0.32)", glyphColor: "rgba(255, 211, 106, 0.16)", pattern: "asteroid", enemyWeights: { burrower: 0.18 }, starTint: "#ffe2a3" },
@@ -438,6 +452,7 @@
   const activeSkills = [
     {
       id: "voidLance",
+      icon: "assets/images/icons/void-lance.webp",
       nameKey: "active.voidLance.name",
       categoryKey: "cat.active",
       cooldown: level => Math.max(5.8, 9.5 - level * 0.8),
@@ -445,6 +460,7 @@
     },
     {
       id: "gravityWell",
+      icon: "assets/images/icons/gravity-well.webp",
       nameKey: "active.gravityWell.name",
       categoryKey: "cat.active",
       cooldown: level => Math.max(7.5, 12 - level * 0.9),
@@ -452,6 +468,7 @@
     },
     {
       id: "phaseBlink",
+      icon: "assets/images/icons/phase-blink.webp",
       nameKey: "active.phaseBlink.name",
       categoryKey: "cat.active",
       cooldown: level => Math.max(4.8, 8.5 - level * 0.7),
@@ -459,6 +476,7 @@
     },
     {
       id: "ionStorm",
+      icon: "assets/images/icons/ion-storm.webp",
       nameKey: "active.ionStorm.name",
       categoryKey: "cat.active",
       cooldown: level => Math.max(8.5, 13.5 - level),
@@ -534,6 +552,19 @@
     } catch {
       showToast(t("toast.saveSettingsFailed"), 1.8, "warning");
     }
+  }
+
+  function loadEnemySpriteAssets(sources) {
+    if (typeof Image === "undefined") return {};
+    return Object.fromEntries(Object.entries(sources).map(([type, src]) => {
+      const image = new Image();
+      const asset = { image, loaded: false, failed: false };
+      image.decoding = "async";
+      image.onload = () => { asset.loaded = true; };
+      image.onerror = () => { asset.failed = true; };
+      image.src = src;
+      return [type, asset];
+    }));
   }
 
   function getQualityPreset() {
@@ -1920,6 +1951,10 @@
       button.className = "upgrade-card";
       button.type = "button";
       button.dataset.rarity = skill.rarity || "common";
+      if (skill.icon) {
+        button.classList.add("has-icon");
+        button.appendChild(createUpgradeIcon(skill));
+      }
       category.textContent = getSkillCategory(skill);
       name.textContent = getSkillName(skill);
       description.textContent = getSkillDescription(skill, current);
@@ -1929,6 +1964,17 @@
     });
     setMode("levelUp");
     playSound("level");
+  }
+
+  function createUpgradeIcon(skill) {
+    const frame = document.createElement("div");
+    const image = document.createElement("img");
+    frame.className = "upgrade-icon";
+    image.src = skill.icon;
+    image.alt = "";
+    image.decoding = "async";
+    frame.appendChild(image);
+    return frame;
   }
 
   function getUpgradeCurrentLevel(skill) {
@@ -1972,6 +2018,7 @@
         nameKey: skill.nameKey,
         categoryKey: skill.categoryKey,
         max: 1,
+        icon: skill.icon,
         descKey: skill.descKey,
         desc: () => `${getActiveSkillDescription(skill, 1)} ${t("skill.onceActive")}`,
         apply: () => setActiveSkill(skill)
@@ -1986,6 +2033,7 @@
         nameKey: active.nameKey,
         categoryKey: "cat.activeUpgrade",
         max: 4,
+        icon: active.icon,
         desc: () => `${getActiveSkillDescription(active, p.activeSkillLevel)} ${t("skill.activeUpgradeDesc")}`,
         apply: () => upgradeActiveSkill()
       });
@@ -2650,22 +2698,75 @@
     }
   }
 
+  function getEnemySprite(enemy) {
+    const asset = enemySpriteAssets[enemy.type];
+    return asset && asset.loaded && !asset.failed ? asset.image : null;
+  }
+
+  function getEnemySpriteScale(enemy) {
+    if (enemy.type === "boss") return 5.2;
+    if (enemy.type === "elite") return 4.4;
+    if (enemy.type === "wisp") return 4.1;
+    if (enemy.type === "tank" || enemy.type === "sentinel" || enemy.type === "stormer") return 4;
+    if (enemy.type === "burrower") return 4.2;
+    return 3.8;
+  }
+
+  function getEnemyDrawAngle(enemy) {
+    if (!state.player) return 0;
+    const angle = Math.atan2(state.player.y - enemy.y, state.player.x - enemy.x) + Math.PI / 2;
+    if (enemy.type === "boss") return angle + Math.sin(state.elapsed * 0.55) * 0.08;
+    if (enemy.type === "bomber" || enemy.type === "stormer") return angle + Math.sin(state.elapsed * 5.2) * 0.12;
+    return angle;
+  }
+
+  function drawProceduralEnemy(enemy, quality) {
+    ctx.save();
+    ctx.translate(enemy.x, enemy.y);
+    ctx.rotate(state.elapsed * (enemy.type === "boss" ? 0.25 : 1));
+    ctx.shadowColor = enemy.color;
+    ctx.shadowBlur = (enemy.type === "boss" ? 28 : 16) * quality.shadowBlur;
+    ctx.fillStyle = enemy.flash > 0 ? "#ffffff" : enemy.color;
+    ctx.strokeStyle = "rgba(255,255,255,0.75)";
+    ctx.lineWidth = enemy.type === "elite" || enemy.type === "boss" ? 3 : 1.4;
+    drawEnemyShape(enemy);
+    ctx.fill();
+    ctx.stroke();
+    drawEnemyDetails(enemy);
+    ctx.restore();
+  }
+
+  function drawEnemySprite(enemy, quality) {
+    const image = getEnemySprite(enemy);
+    if (!image) return false;
+    const stressed = isPerfStressed();
+    const size = Math.max(enemy.radius * 2.8, enemy.radius * getEnemySpriteScale(enemy));
+    ctx.save();
+    ctx.translate(enemy.x, enemy.y);
+    ctx.rotate(getEnemyDrawAngle(enemy));
+    ctx.globalAlpha = enemy.flash > 0 ? 1 : 0.92;
+    ctx.shadowColor = enemy.flash > 0 ? "#ffffff" : enemy.variantColor || enemy.color;
+    ctx.shadowBlur = (enemy.type === "boss" ? 28 : 14) * quality.shadowBlur * (stressed ? 0.35 : 1);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(image, -size / 2, -size / 2, size, size);
+    if (enemy.flash > 0) {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = clamp(enemy.flash * 2.8, 0, 0.68);
+      ctx.fillStyle = "#ffffff";
+      ctx.shadowBlur = 0;
+      drawEnemyShape(enemy);
+      ctx.fill();
+    }
+    ctx.restore();
+    return true;
+  }
+
   function drawEnemies() {
     const quality = getQualityPreset();
     state.enemies.forEach(enemy => {
-      ctx.save();
-      ctx.translate(enemy.x, enemy.y);
-      ctx.rotate(state.elapsed * (enemy.type === "boss" ? 0.25 : 1));
-      ctx.shadowColor = enemy.color;
-      ctx.shadowBlur = (enemy.type === "boss" ? 28 : 16) * quality.shadowBlur;
-      ctx.fillStyle = enemy.flash > 0 ? "#ffffff" : enemy.color;
-      ctx.strokeStyle = "rgba(255,255,255,0.75)";
-      ctx.lineWidth = enemy.type === "elite" || enemy.type === "boss" ? 3 : 1.4;
-      drawEnemyShape(enemy);
-      ctx.fill();
-      ctx.stroke();
-      drawEnemyDetails(enemy);
-      ctx.restore();
+      const margin = enemy.radius * 5;
+      if (enemy.x < -margin || enemy.y < -margin || enemy.x > state.width + margin || enemy.y > state.height + margin) return;
+      if (!drawEnemySprite(enemy, quality)) drawProceduralEnemy(enemy, quality);
       if (enemy.type === "elite" || enemy.type === "boss") {
         ctx.strokeStyle = enemy.color;
         ctx.globalAlpha = 0.35 + Math.sin(state.elapsed * 5) * 0.12;
@@ -3090,5 +3191,3 @@
   updateMenuState();
   requestAnimationFrame(loop);
 })();
-
-

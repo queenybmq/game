@@ -1,0 +1,25 @@
+{
+  "mode": "generate",
+  "model": "gpt-image-2-b",
+  "size_requested": "512x512",
+  "prompt": "top-down enemy spacecraft sprite for Ruin Sentinel, emerald ancient machine hostile faction, hexagonal relic drone with glowing scanning eye, centered orthographic game asset on pure black background, no text, no UI, no frame",
+  "source": "url",
+  "output": "assets/source/gpt-image2/enemies/sentinel.png",
+  "image": {
+    "format": "png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1561456
+  },
+  "created": 1779273556,
+  "usage": {
+    "total_tokens": 4219,
+    "input_tokens": 44,
+    "output_tokens": 4175,
+    "input_tokens_details": {
+      "text_tokens": 44,
+      "image_tokens": 0
+    }
+  },
+  "revised_prompt": ""
+}

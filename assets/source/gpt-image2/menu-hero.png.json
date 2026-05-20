@@ -1,0 +1,25 @@
+{
+  "mode": "generate",
+  "model": "gpt-image-2-b",
+  "size_requested": "512x512",
+  "prompt": "cinematic neon sci-fi key art for Starship Survivor, lone cyan top-down starship facing a distant magenta void mothership in dark space, subtle blue nebula and amber energy shards, strong first-screen composition, no text, no letters, leave center-left readable for title",
+  "source": "url",
+  "output": "assets/source/gpt-image2/menu-hero.png",
+  "image": {
+    "format": "png",
+    "width": 1024,
+    "height": 1024,
+    "bytes": 1681836
+  },
+  "created": 1779271460,
+  "usage": {
+    "total_tokens": 4231,
+    "input_tokens": 56,
+    "output_tokens": 4175,
+    "input_tokens_details": {
+      "text_tokens": 56,
+      "image_tokens": 0
+    }
+  },
+  "revised_prompt": ""
+}

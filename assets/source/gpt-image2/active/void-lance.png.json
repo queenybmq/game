@@ -1,0 +1,25 @@
+{
+  "mode": "generate",
+  "model": "gpt-image-2-b",
+  "size_requested": "512x512",
+  "prompt": "top-down neon sci-fi arcade game skill icon for Void Lance, a cyan-white piercing energy spear crossing a dark void core, clean centered silhouette, crisp glowing outline, readable at 48px, no text, no letters, no watermark",
+  "source": "url",
+  "output": "assets/source/gpt-image2/active/void-lance.png",
+  "image": {
+    "format": "png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1566736
+  },
+  "created": 1779271277,
+  "usage": {
+    "total_tokens": 4222,
+    "input_tokens": 47,
+    "output_tokens": 4175,
+    "input_tokens_details": {
+      "text_tokens": 47,
+      "image_tokens": 0
+    }
+  },
+  "revised_prompt": ""
+}
