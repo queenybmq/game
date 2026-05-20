@@ -50,6 +50,7 @@
     restartButton: requiredElement("restartButton"),
     resultMenuButton: requiredElement("resultMenuButton"),
     settingsBackButton: requiredElement("settingsBackButton"),
+    languageSelect: requiredElement("languageSelect"),
     volumeControl: requiredElement("volumeControl"),
     qualitySelect: requiredElement("qualitySelect"),
     shakeToggle: requiredElement("shakeToggle"),
@@ -63,16 +64,123 @@
   const TAU = Math.PI * 2;
   const STORAGE_KEY = "starship-survivor-records";
   const SETTINGS_KEY = "starship-survivor-settings";
-  const MAX_PARTICLES = 220;
-  const MAX_FLOATING_TEXTS = 58;
+  const MAX_PARTICLES = 180;
+  const MAX_FLOATING_TEXTS = 34;
   const QUALITY_PRESETS = {
-    high: { dpr: 2, particleScale: 1, starDensity: 8500, shadowBlur: 1, scanOverlay: true, backgroundLines: true },
-    balanced: { dpr: 1.65, particleScale: 0.72, starDensity: 11000, shadowBlur: 0.78, scanOverlay: true, backgroundLines: true },
-    performance: { dpr: 1.25, particleScale: 0.48, starDensity: 15000, shadowBlur: 0.45, scanOverlay: false, backgroundLines: false }
+    high: { dpr: 1.75, particleScale: 0.82, starDensity: 10500, shadowBlur: 0.82, scanOverlay: true, backgroundLines: true },
+    balanced: { dpr: 1.4, particleScale: 0.56, starDensity: 14500, shadowBlur: 0.52, scanOverlay: true, backgroundLines: true },
+    performance: { dpr: 1.05, particleScale: 0.3, starDensity: 21000, shadowBlur: 0.25, scanOverlay: false, backgroundLines: false }
   };
+  const LANGUAGES = ["en", "zh-CN", "zh-TW", "ja"];
+  const LANGUAGE_META = {
+    en: { htmlLang: "en", title: "Starship Survivor", canvasLabel: "Starship Survivor game screen" },
+    "zh-CN": { htmlLang: "zh-Hans", title: "星舰幸存者", canvasLabel: "星舰幸存者游戏画面" },
+    "zh-TW": { htmlLang: "zh-Hant", title: "星艦倖存者", canvasLabel: "星艦倖存者遊戲畫面" },
+    ja: { htmlLang: "ja", title: "スターシップ・サバイバー", canvasLabel: "スターシップ・サバイバーのゲーム画面" }
+  };
+  const I18N = {
+    en: {
+      "menu.eyebrow": "NEON VOID SURVIVAL", "menu.title": "Starship Survivor", "menu.lead": "Pilot the last starship, break through the neon swarm, upgrade your arsenal, and challenge the Void Carrier.",
+      "menu.controlMove": "Move by following the pointer", "menu.controlAim": "Auto aim, auto fire", "menu.controlSkill": "Left click triggers active skill", "menu.controlPause": "P / Esc to pause", "menu.controlSettings": "O opens settings", "menu.controlReturn": "Return to menu keeps the current run",
+      "menu.start": "New Game", "menu.continue": "Continue", "menu.settings": "Game Settings", "records.bestScore": "Best Score", "records.bestTime": "Longest Survival", "records.bestKills": "Most Kills",
+      "level.eyebrow": "SYSTEM UPGRADE", "level.title": "Choose One Upgrade", "pause.eyebrow": "PAUSED", "pause.title": "Battle Paused", "pause.hint": "Press P or Esc to return. Press O to open settings quickly.", "pause.resume": "Resume Battle",
+      "result.eyebrow": "MISSION REPORT", "result.restart": "Deploy Again", "settings.eyebrow": "GAME SETTINGS", "settings.title": "Game Settings", "settings.language": "Language", "settings.volume": "Sound Volume", "settings.quality": "Graphics Quality", "settings.qualityHigh": "High", "settings.qualityBalanced": "Balanced", "settings.qualityPerformance": "Performance", "settings.shake": "Screen Shake", "settings.motion": "Dynamic Scan Effects", "settings.autoPerf": "Auto Reduce Effects", "common.back": "Back", "common.backToMenu": "Back to Menu",
+      "hud.time": "Time", "hud.kills": "Kills", "hud.level": "Level", "hud.score": "Score", "hud.map": "Sector", "hud.hp": "Hull", "hud.shield": "Shield", "hud.xp": "Sync XP", "hud.activeNone": "Active skill offline", "hud.activeAcquire": "Upgrade to acquire", "hud.activeReady": "Left click ready",
+      "result.titleBoss": "Lost after the Breakthrough", "result.titleDefault": "Hull Failure", "result.time": "Run Time", "result.kills": "Run Kills", "result.level": "Run Level", "result.score": "Run Score", "result.bestScore": "Best Score", "result.bestTime": "Best Time", "result.bestKills": "Best Kills", "result.bestLevel": "Best Level",
+      "toast.saveSettingsFailed": "Settings could not be saved, but they are applied now.", "toast.saveRecordsFailed": "Records could not be saved, but this run can continue.", "toast.start": "Starship launched: break the blockade", "toast.continue": "Battle resumed: tactical systems restored"
+    },
+    "zh-CN": {
+      "menu.eyebrow": "霓虹虚空生存", "menu.title": "星舰幸存者", "menu.lead": "驾驶最后一艘星舰，在霓虹星海中突破蜂群、升级武装，挑战虚空母舰。",
+      "menu.controlMove": "鼠标指针牵引移动", "menu.controlAim": "自动瞄准，自动射击", "menu.controlSkill": "左键触发主动技能", "menu.controlPause": "P / Esc 暂停", "menu.controlSettings": "O 打开游戏设置", "menu.controlReturn": "返回主菜单可保留战局",
+      "menu.start": "开始新游戏", "menu.continue": "继续游戏", "menu.settings": "游戏设置", "records.bestScore": "最高分", "records.bestTime": "最长生存", "records.bestKills": "最高击杀",
+      "level.eyebrow": "系统升级", "level.title": "选择一项强化", "pause.eyebrow": "已暂停", "pause.title": "战场暂停", "pause.hint": "按 P 或 Esc 返回战斗，按 O 可快速打开设置。", "pause.resume": "恢复作战",
+      "result.eyebrow": "任务报告", "result.restart": "重新出击", "settings.eyebrow": "游戏设置", "settings.title": "游戏设置", "settings.language": "语言", "settings.volume": "音效音量", "settings.quality": "画质模式", "settings.qualityHigh": "高画质", "settings.qualityBalanced": "平衡", "settings.qualityPerformance": "性能优先", "settings.shake": "画面震动", "settings.motion": "动态扫描效果", "settings.autoPerf": "自动降低特效压力", "common.back": "返回", "common.backToMenu": "返回主菜单",
+      "hud.time": "时间", "hud.kills": "击杀", "hud.level": "等级", "hud.score": "分数", "hud.map": "星域", "hud.hp": "舰体", "hud.shield": "护盾", "hud.xp": "同步经验", "hud.activeNone": "主动技能未同步", "hud.activeAcquire": "升级获取", "hud.activeReady": "左键就绪",
+      "result.titleBoss": "突破封锁后失联", "result.titleDefault": "舰体失效", "result.time": "本局时间", "result.kills": "本局击杀", "result.level": "本局等级", "result.score": "本局分数", "result.bestScore": "最高分", "result.bestTime": "最长时间", "result.bestKills": "最高击杀", "result.bestLevel": "最高等级",
+      "toast.saveSettingsFailed": "设置保存失败，本次仍会套用", "toast.saveRecordsFailed": "纪录保存失败，但本局可继续游玩", "toast.start": "星舰启动：突破封锁线", "toast.continue": "继续作战：战术系统恢复"
+    },
+    "zh-TW": {
+      "menu.eyebrow": "NEON VOID SURVIVAL", "menu.title": "星艦倖存者", "menu.lead": "駕駛最後一艘星艦，在霓虹星海中突破蜂群、升級武裝，挑戰虛空母艦。",
+      "menu.controlMove": "鼠標指針牽引移動", "menu.controlAim": "自動瞄準，自動射擊", "menu.controlSkill": "左鍵觸發主動技能", "menu.controlPause": "P / Esc 暫停", "menu.controlSettings": "O 開啟遊戲設置", "menu.controlReturn": "返回主選單可保留戰局",
+      "menu.start": "開始新遊戲", "menu.continue": "繼續遊戲", "menu.settings": "遊戲設置", "records.bestScore": "最高分", "records.bestTime": "最長生存", "records.bestKills": "最高擊殺",
+      "level.eyebrow": "SYSTEM UPGRADE", "level.title": "選擇一項強化", "pause.eyebrow": "PAUSED", "pause.title": "戰場暫停", "pause.hint": "按 P 或 Esc 返回戰鬥，按 O 可快速開啟設置。", "pause.resume": "恢復作戰",
+      "result.eyebrow": "MISSION REPORT", "result.restart": "重新出擊", "settings.eyebrow": "GAME SETTINGS", "settings.title": "遊戲設置", "settings.language": "語言", "settings.volume": "音效音量", "settings.quality": "畫質模式", "settings.qualityHigh": "高畫質", "settings.qualityBalanced": "平衡", "settings.qualityPerformance": "性能優先", "settings.shake": "畫面震動", "settings.motion": "動態掃描效果", "settings.autoPerf": "自動降低特效壓力", "common.back": "返回", "common.backToMenu": "返回主選單",
+      "hud.time": "時間", "hud.kills": "擊殺", "hud.level": "等級", "hud.score": "分數", "hud.map": "星域", "hud.hp": "艦體", "hud.shield": "護盾", "hud.xp": "同步經驗", "hud.activeNone": "主動技能未同步", "hud.activeAcquire": "升級獲取", "hud.activeReady": "左鍵就緒",
+      "result.titleBoss": "突破封鎖後失聯", "result.titleDefault": "艦體失效", "result.time": "本局時間", "result.kills": "本局擊殺", "result.level": "本局等級", "result.score": "本局分數", "result.bestScore": "最高分", "result.bestTime": "最長時間", "result.bestKills": "最高擊殺", "result.bestLevel": "最高等級",
+      "toast.saveSettingsFailed": "設定儲存失敗，本次仍會套用", "toast.saveRecordsFailed": "紀錄儲存失敗，但本局可繼續遊玩", "toast.start": "星艦啟動：突破封鎖線", "toast.continue": "繼續作戰：戰術系統恢復"
+    },
+    ja: {
+      "menu.eyebrow": "ネオン虚空サバイバル", "menu.title": "スターシップ・サバイバー", "menu.lead": "最後のスターシップを操り、ネオンの星海で群れを突破し、武装を強化して虚空母艦に挑め。",
+      "menu.controlMove": "ポインターに追従して移動", "menu.controlAim": "自動照準・自動射撃", "menu.controlSkill": "左クリックでアクティブスキル", "menu.controlPause": "P / Esc で一時停止", "menu.controlSettings": "O で設定を開く", "menu.controlReturn": "メニューに戻っても現在の出撃を保持",
+      "menu.start": "新規ゲーム", "menu.continue": "続きから", "menu.settings": "ゲーム設定", "records.bestScore": "最高スコア", "records.bestTime": "最長生存", "records.bestKills": "最多撃破",
+      "level.eyebrow": "システム強化", "level.title": "強化を1つ選択", "pause.eyebrow": "一時停止", "pause.title": "戦闘停止中", "pause.hint": "P または Esc で戦闘に戻る。O で設定をすぐ開けます。", "pause.resume": "戦闘再開",
+      "result.eyebrow": "ミッション報告", "result.restart": "再出撃", "settings.eyebrow": "ゲーム設定", "settings.title": "ゲーム設定", "settings.language": "言語", "settings.volume": "効果音音量", "settings.quality": "画質モード", "settings.qualityHigh": "高画質", "settings.qualityBalanced": "バランス", "settings.qualityPerformance": "パフォーマンス", "settings.shake": "画面揺れ", "settings.motion": "動的スキャン効果", "settings.autoPerf": "負荷時に演出を自動低減", "common.back": "戻る", "common.backToMenu": "メニューへ戻る",
+      "hud.time": "時間", "hud.kills": "撃破", "hud.level": "レベル", "hud.score": "スコア", "hud.map": "宙域", "hud.hp": "船体", "hud.shield": "シールド", "hud.xp": "同期経験", "hud.activeNone": "アクティブ未同期", "hud.activeAcquire": "強化で取得", "hud.activeReady": "左クリック準備完了",
+      "result.titleBoss": "突破後に通信途絶", "result.titleDefault": "船体機能停止", "result.time": "出撃時間", "result.kills": "撃破数", "result.level": "到達レベル", "result.score": "スコア", "result.bestScore": "最高スコア", "result.bestTime": "最長時間", "result.bestKills": "最多撃破", "result.bestLevel": "最高レベル",
+      "toast.saveSettingsFailed": "設定を保存できませんでしたが、今回は適用されます", "toast.saveRecordsFailed": "記録を保存できませんでしたが、この出撃は続行できます", "toast.start": "スターシップ起動：封鎖線を突破", "toast.continue": "戦闘再開：戦術システム復旧"
+    }
+  };
+  const I18N_DYNAMIC = {
+    en: {
+      "cat.attack": "Attack", "cat.defense": "Defense", "cat.mobility": "Mobility", "cat.special": "Special", "cat.build": "Build", "cat.primary": "Primary Weapon", "cat.active": "Active Skill", "cat.activeUpgrade": "Active Upgrade", "cat.supply": "Supply",
+      "common.levelShort": "Lv.", "skill.onceActive": "Only one active skill can be synchronized per run.", "skill.activeUpgradeDesc": "Upgrading lowers cooldown and strengthens the effect.", "skill.synced": "{name} synchronized", "skill.released": "{name} released", "skill.notCharged": "Active skill not charged yet", "skill.heal.name": "Emergency Repair", "skill.heal.desc": "Restore 40 hull and gain 500 score.",
+      "map.nebula": "Nebula Remnant", "map.asteroid": "Asteroid Ring", "map.storm": "Ion Storm", "map.ruins": "Machine Ruins", "map.enter": "Route entered: {name}",
+      "enemy.hunter": "Hunter", "enemy.tank": "Armored Frigate", "enemy.shooter": "Scatter Drone", "enemy.bomber": "Bomber Swarm", "enemy.wisp": "Nebula Wisp", "enemy.burrower": "Rock Drill", "enemy.stormer": "Storm Conductor", "enemy.sentinel": "Ruin Sentinel", "enemy.elite": "Elite Ship", "enemy.boss": "Void Carrier",
+      "wave.0": "Hunter swarm approaching", "wave.1": "Armored frigates entering battle", "wave.2": "Scatter drones suppressing fire", "wave.3": "Bomber swarm breached the line", "wave.4": "Void signal rising sharply", "wave.5": "Overload wave intensifying",
+      "event.xpComet": "XP comet passing: crystal rain scattered", "event.eliteSignal": "Elite signal shifted: squad incoming", "event.supplyDrop": "Supply pod unlocked: tactical resources deployed", "event.crystalBloom": "Crystal bloom: multi-point XP recovery", "event.unstableCore": "Unstable core detected: detonation possible", "event.magnetPulse": "Magnetic pulse: recovery efficiency boosted", "event.overclockWindow": "Overclock window: weapon core heating", "event.voidTurbulence": "Void turbulence: enemy paths shifted",
+      "toast.elite": "Elite ship entering battle", "toast.boss": "Warning: Void Carrier deployed", "toast.bossDefeated": "Void Carrier destroyed: overload waves activated",
+      "pickup.heal": "Repair", "pickup.shield": "Shield", "pickup.bomb": "Blast Core", "pickup.magnet": "Magnet", "pickup.overclock": "Overclock", "floating.dodge": "Dodge", "buff.magnetRush": "Magnetic rush active", "buff.overclock": "Weapon overclock active", "buff.dangerReward": "High-risk yield active", "buff.default": "Temporary boost active",
+      "active.voidLance.name": "Void Lance", "active.voidLance.desc": "Left click fires a piercing lance for heavy path damage. Current level {level}/4.", "active.gravityWell.name": "Gravity Well", "active.gravityWell.desc": "Left click creates a pulling field at the pointer and deals sustained damage. Current level {level}/4.", "active.phaseBlink.name": "Phase Blink", "active.phaseBlink.desc": "Left click blinks toward the pointer and releases a shockwave. Current level {level}/4.", "active.ionStorm.name": "Ion Storm", "active.ionStorm.desc": "Left click calls multiple ion strikes against nearby enemies. Current level {level}/4.",
+      "skill.pulse.name": "Pulse Cannon Upgrade", "skill.pulse.desc": "Increases pulse cannon damage and fire rate. Current level {level}/6.", "skill.split.name": "Split Laser", "skill.split.desc": "Adds scatter barrage and piercing firepower. Current level {level}/5.", "skill.missile.name": "Plasma Missile", "skill.missile.desc": "Unlocks or upgrades tracking missiles. Current level {level}/5.", "skill.nova.name": "Starcore Burst", "skill.nova.desc": "Kills may detonate a starcore blast. Current level {level}/4.", "skill.crit.name": "Critical Calibration", "skill.crit.desc": "Raises critical chance and critical damage. Current level {level}/5.", "skill.shield.name": "Shield Expansion", "skill.shield.desc": "Increases max shield and regeneration. Current level {level}/5.", "skill.repair.name": "Nano Repair", "skill.repair.desc": "Continuously repairs hull. Current level {level}/4.", "skill.phase.name": "Phase Evasion", "skill.phase.desc": "Increases dodge and extends hit protection. Current level {level}/4.", "skill.engine.name": "Engine Overclock", "skill.engine.desc": "Increases movement speed and handling. Current level {level}/5.", "skill.magnet.name": "Magnetic Recovery", "skill.magnet.desc": "Expands XP crystal attraction range. Current level {level}/5.", "skill.drone.name": "Orbital Drone", "skill.drone.desc": "Adds orbital firepower and contact damage. Current level {level}/5.", "skill.emp.name": "EMP Pulse", "skill.emp.desc": "Periodically releases area damage. Current level {level}/5.", "skill.siphonShield.name": "Siphon Shield", "skill.siphonShield.desc": "Kills restore a small amount of shield. Current level {level}/4.", "skill.pickupBurst.name": "Pickup Burst", "skill.pickupBurst.desc": "Consecutive pickups trigger a small area burst. Current level {level}/4.", "skill.closeCombat.name": "Close-Range Eradication", "skill.closeCombat.desc": "Deals bonus damage to nearby enemies. Current level {level}/4.", "skill.lowHpOverdrive.name": "Critical Firepower", "skill.lowHpOverdrive.desc": "Low hull increases damage and fire rate. Current level {level}/3.", "skill.activeBattery.name": "Active Battery", "skill.activeBattery.desc": "Kills may shorten active skill cooldown. Current level {level}/4.", "skill.volatileRounds.name": "Volatile Rounds", "skill.volatileRounds.desc": "Bullet hits may create small explosions. Current level {level}/3.", "skill.railWeapon.name": "Rail Spike Cannon", "skill.railWeapon.desc": "Fires parallel high-speed piercing spikes. Current level {level}/4.", "skill.arcWeapon.name": "Chain Arc", "skill.arcWeapon.desc": "Releases parallel jumping arcs. Current level {level}/4.", "skill.flakWeapon.name": "Greenflame Flak", "skill.flakWeapon.desc": "Fires parallel close-range flak. Current level {level}/4."
+    },
+    "zh-CN": {
+      "cat.attack": "攻击", "cat.defense": "防御", "cat.mobility": "机动", "cat.special": "特殊", "cat.build": "Build", "cat.primary": "主武器", "cat.active": "主动技能", "cat.activeUpgrade": "主动强化", "cat.supply": "补给",
+      "common.levelShort": "Lv.", "skill.onceActive": "一局只能同步一个主动技能。", "skill.activeUpgradeDesc": "升级后降低冷却并提高效果。", "skill.synced": "{name} 已同步", "skill.released": "{name} 已释放", "skill.notCharged": "主动技能尚未充能", "skill.heal.name": "紧急修复", "skill.heal.desc": "恢复 40 舰体并获得 500 分。",
+      "map.nebula": "星云残域", "map.asteroid": "碎岩环带", "map.storm": "离子风暴", "map.ruins": "机械遗迹", "map.enter": "航道切入：{name}",
+      "enemy.hunter": "追猎机", "enemy.tank": "装甲舰", "enemy.shooter": "散射机", "enemy.bomber": "自爆蜂群", "enemy.wisp": "星云幽梭", "enemy.burrower": "碎岩钻机", "enemy.stormer": "雷暴导体", "enemy.sentinel": "遗迹哨兵", "enemy.elite": "精英舰", "enemy.boss": "虚空母舰",
+      "wave.0": "追猎机群接近", "wave.1": "装甲舰加入战场", "wave.2": "散射机开始火力压制", "wave.3": "自爆蜂群突破防线", "wave.4": "虚空信号急剧增强", "wave.5": "超载波次持续增强",
+      "event.xpComet": "经验彗星掠过：晶体雨散落", "event.eliteSignal": "精英信号偏移：小队突入", "event.supplyDrop": "补给舱解锁：战术物资投放", "event.crystalBloom": "晶体绽放：多点经验回收", "event.unstableCore": "不稳定核心出现：可触发爆裂", "event.magnetPulse": "磁场脉冲：回收效率提升", "event.overclockWindow": "超频窗口：武装核心升温", "event.voidTurbulence": "虚空乱流：敌群路径偏移",
+      "toast.elite": "精英舰进入战场", "toast.boss": "警告：虚空母舰登场", "toast.bossDefeated": "虚空母舰已摧毁：超载波次启动",
+      "pickup.heal": "修复", "pickup.shield": "护盾", "pickup.bomb": "爆裂核心", "pickup.magnet": "磁力", "pickup.overclock": "超频", "floating.dodge": "闪避", "buff.magnetRush": "磁力奔流启动", "buff.overclock": "武装超频启动", "buff.dangerReward": "高危收益启动", "buff.default": "临时增益启动",
+      "active.voidLance.name": "虚空长矛", "active.voidLance.desc": "左键发射穿透长矛，对路径敌人造成高额伤害，目前等级 {level}/4。", "active.gravityWell.name": "重力井", "active.gravityWell.desc": "左键在鼠标位置生成牵引力场并持续伤害，目前等级 {level}/4。", "active.phaseBlink.name": "相位闪烁", "active.phaseBlink.desc": "左键向鼠标方向短距离闪烁并释放冲击波，目前等级 {level}/4。", "active.ionStorm.name": "离子风暴", "active.ionStorm.desc": "左键呼叫多道离子雷击打击附近敌人，目前等级 {level}/4。"
+    },
+    "zh-TW": {
+      "cat.attack": "攻擊", "cat.defense": "防禦", "cat.mobility": "機動", "cat.special": "特殊", "cat.build": "Build", "cat.primary": "主武器", "cat.active": "主動技能", "cat.activeUpgrade": "主動強化", "cat.supply": "補給",
+      "common.levelShort": "Lv.", "skill.onceActive": "一局只能同步一個主動技能。", "skill.activeUpgradeDesc": "升級後降低冷卻並提高效果。", "skill.synced": "{name} 已同步", "skill.released": "{name} 已釋放", "skill.notCharged": "主動技能尚未充能", "skill.heal.name": "緊急修復", "skill.heal.desc": "恢復 40 艦體並獲得 500 分。",
+      "map.nebula": "星雲殘域", "map.asteroid": "碎岩環帶", "map.storm": "離子風暴", "map.ruins": "機械遺跡", "map.enter": "航道切入：{name}",
+      "enemy.hunter": "追獵機", "enemy.tank": "裝甲艦", "enemy.shooter": "散射機", "enemy.bomber": "自爆蜂群", "enemy.wisp": "星雲幽梭", "enemy.burrower": "碎岩鑽機", "enemy.stormer": "雷暴導體", "enemy.sentinel": "遺跡哨兵", "enemy.elite": "菁英艦", "enemy.boss": "虛空母艦",
+      "wave.0": "追獵機群接近", "wave.1": "裝甲艦加入戰場", "wave.2": "散射機開始火力壓制", "wave.3": "自爆蜂群突破防線", "wave.4": "虛空訊號急遽增強", "wave.5": "超載波次持續增強",
+      "event.xpComet": "經驗彗星掠過：晶體雨散落", "event.eliteSignal": "菁英訊號偏移：小隊突入", "event.supplyDrop": "補給艙解鎖：戰術物資投放", "event.crystalBloom": "晶體綻放：多點經驗回收", "event.unstableCore": "不穩定核心出現：可觸發爆裂", "event.magnetPulse": "磁場脈衝：回收效率提升", "event.overclockWindow": "超頻窗口：武裝核心升溫", "event.voidTurbulence": "虛空亂流：敵群路徑偏移",
+      "toast.elite": "菁英艦進入戰場", "toast.boss": "警告：虛空母艦登場", "toast.bossDefeated": "虛空母艦已摧毀：超載波次啟動",
+      "pickup.heal": "修復", "pickup.shield": "護盾", "pickup.bomb": "爆裂核心", "pickup.magnet": "磁力", "pickup.overclock": "超頻", "floating.dodge": "閃避", "buff.magnetRush": "磁力奔流啟動", "buff.overclock": "武裝超頻啟動", "buff.dangerReward": "高危收益啟動", "buff.default": "臨時增益啟動",
+      "active.voidLance.name": "虛空長矛", "active.voidLance.desc": "左鍵發射穿透長矛，對路徑敵人造成高額傷害，目前等級 {level}/4。", "active.gravityWell.name": "重力井", "active.gravityWell.desc": "左鍵在鼠標位置生成牽引力場並持續傷害，目前等級 {level}/4。", "active.phaseBlink.name": "相位閃爍", "active.phaseBlink.desc": "左鍵向鼠標方向短距離閃爍並釋放衝擊波，目前等級 {level}/4。", "active.ionStorm.name": "離子風暴", "active.ionStorm.desc": "左鍵呼叫多道離子雷擊打擊附近敵人，目前等級 {level}/4。"
+    },
+    ja: {
+      "cat.attack": "攻撃", "cat.defense": "防御", "cat.mobility": "機動", "cat.special": "特殊", "cat.build": "ビルド", "cat.primary": "主武器", "cat.active": "アクティブ", "cat.activeUpgrade": "アクティブ強化", "cat.supply": "補給",
+      "common.levelShort": "Lv.", "skill.onceActive": "1回の出撃で同期できるアクティブスキルは1つだけです。", "skill.activeUpgradeDesc": "強化するとクールダウンが短縮され、効果が上昇します。", "skill.synced": "{name} を同期しました", "skill.released": "{name} を発動", "skill.notCharged": "アクティブスキルはまだチャージ中", "skill.heal.name": "緊急修理", "skill.heal.desc": "船体を40回復し、500スコアを獲得。",
+      "map.nebula": "星雲残域", "map.asteroid": "砕岩リング", "map.storm": "イオン嵐", "map.ruins": "機械遺跡", "map.enter": "航路突入：{name}",
+      "enemy.hunter": "ハンター", "enemy.tank": "装甲艦", "enemy.shooter": "散射機", "enemy.bomber": "自爆群", "enemy.wisp": "星雲ウィスプ", "enemy.burrower": "砕岩ドリル", "enemy.stormer": "雷暴導体", "enemy.sentinel": "遺跡センチネル", "enemy.elite": "エリート艦", "enemy.boss": "虚空母艦",
+      "wave.0": "ハンター群接近", "wave.1": "装甲艦が戦場に参加", "wave.2": "散射機が制圧射撃開始", "wave.3": "自爆群が防衛線を突破", "wave.4": "虚空信号が急上昇", "wave.5": "オーバーロード波が強化中",
+      "event.xpComet": "経験彗星通過：結晶雨が散布", "event.eliteSignal": "エリート信号偏移：小隊突入", "event.supplyDrop": "補給ポッド解放：戦術物資投下", "event.crystalBloom": "結晶開花：多点経験回収", "event.unstableCore": "不安定コア出現：爆裂可能", "event.magnetPulse": "磁場パルス：回収効率上昇", "event.overclockWindow": "オーバークロック窓：武装コア加熱", "event.voidTurbulence": "虚空乱流：敵群経路変化",
+      "toast.elite": "エリート艦が戦場に進入", "toast.boss": "警告：虚空母艦出現", "toast.bossDefeated": "虚空母艦撃破：オーバーロード波起動",
+      "pickup.heal": "修理", "pickup.shield": "シールド", "pickup.bomb": "爆裂コア", "pickup.magnet": "磁力", "pickup.overclock": "オーバークロック", "floating.dodge": "回避", "buff.magnetRush": "磁力奔流起動", "buff.overclock": "武装オーバークロック起動", "buff.dangerReward": "高危険報酬起動", "buff.default": "一時強化起動",
+      "active.voidLance.name": "虚空ランス", "active.voidLance.desc": "左クリックで貫通ランスを放ち、経路上の敵に大ダメージ。現在レベル {level}/4。", "active.gravityWell.name": "重力井戸", "active.gravityWell.desc": "左クリックでポインター位置に牽引フィールドを生成し継続ダメージ。現在レベル {level}/4。", "active.phaseBlink.name": "位相ブリンク", "active.phaseBlink.desc": "左クリックでポインター方向へ短距離ブリンクし衝撃波を放つ。現在レベル {level}/4。", "active.ionStorm.name": "イオン嵐", "active.ionStorm.desc": "左クリックで複数のイオン雷撃を呼び、周囲の敵を攻撃。現在レベル {level}/4。"
+    }
+  };
+  Object.keys(I18N_DYNAMIC).forEach(language => Object.assign(I18N[language], I18N_DYNAMIC[language]));
+  Object.assign(I18N["zh-TW"], {
+    "skill.pulse.name": "脈衝炮強化", "skill.pulse.desc": "脈衝炮傷害與射速提升，目前等級 {level}/6。", "skill.split.name": "分裂雷射", "skill.split.desc": "增加散射彈幕與穿透火力，目前等級 {level}/5。", "skill.missile.name": "等離子飛彈", "skill.missile.desc": "啟用或強化追蹤飛彈，目前等級 {level}/5。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "擊殺時機率引爆星核，目前等級 {level}/4。", "skill.crit.name": "暴擊校準", "skill.crit.desc": "提高暴擊率與暴擊傷害，目前等級 {level}/5。", "skill.shield.name": "護盾擴容", "skill.shield.desc": "提升最大護盾與回復速度，目前等級 {level}/5。", "skill.repair.name": "奈米修復", "skill.repair.desc": "持續修復艦體，目前等級 {level}/4。", "skill.phase.name": "相位閃避", "skill.phase.desc": "提高閃避率並延長受擊保護，目前等級 {level}/4。", "skill.engine.name": "引擎超頻", "skill.engine.desc": "提高移動速度與操控感，目前等級 {level}/5。", "skill.magnet.name": "磁力回收", "skill.magnet.desc": "擴大經驗晶體吸附範圍，目前等級 {level}/5。", "skill.drone.name": "環繞無人機", "skill.drone.desc": "增加環繞火力與接觸傷害，目前等級 {level}/5。", "skill.emp.name": "電磁脈衝", "skill.emp.desc": "週期性釋放範圍傷害，目前等級 {level}/5。", "skill.siphonShield.name": "虹吸護盾", "skill.siphonShield.desc": "擊殺回復少量護盾，目前等級 {level}/4。", "skill.pickupBurst.name": "拾取爆裂", "skill.pickupBurst.desc": "連續拾取後觸發小範圍爆裂，目前等級 {level}/4。", "skill.closeCombat.name": "近距離殲滅", "skill.closeCombat.desc": "對近距離敵人造成額外傷害，目前等級 {level}/4。", "skill.lowHpOverdrive.name": "臨界火力", "skill.lowHpOverdrive.desc": "低血量時提高傷害與射速，目前等級 {level}/3。", "skill.activeBattery.name": "主動電池", "skill.activeBattery.desc": "擊殺有機率縮短主動技能冷卻，目前等級 {level}/4。", "skill.volatileRounds.name": "不穩定彈藥", "skill.volatileRounds.desc": "子彈命中有機率造成小爆裂，目前等級 {level}/3。", "skill.railWeapon.name": "軌道長釘炮", "skill.railWeapon.desc": "並行發射高速穿透長釘，目前等級 {level}/4。", "skill.arcWeapon.name": "鏈式電弧", "skill.arcWeapon.desc": "並行釋放跳躍電弧，目前等級 {level}/4。", "skill.flakWeapon.name": "綠焰霰彈", "skill.flakWeapon.desc": "並行發射近距離霰彈，目前等級 {level}/4。"
+  });
+  Object.assign(I18N["zh-CN"], {
+    "skill.pulse.name": "脉冲炮强化", "skill.pulse.desc": "脉冲炮伤害与射速提升，目前等级 {level}/6。", "skill.split.name": "分裂激光", "skill.split.desc": "增加散射弹幕与穿透火力，目前等级 {level}/5。", "skill.missile.name": "等离子飞弹", "skill.missile.desc": "启用或强化追踪飞弹，目前等级 {level}/5。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "击杀时概率引爆星核，目前等级 {level}/4。", "skill.crit.name": "暴击校准", "skill.crit.desc": "提高暴击率与暴击伤害，目前等级 {level}/5。", "skill.shield.name": "护盾扩容", "skill.shield.desc": "提升最大护盾与回复速度，目前等级 {level}/5。", "skill.repair.name": "纳米修复", "skill.repair.desc": "持续修复舰体，目前等级 {level}/4。", "skill.phase.name": "相位闪避", "skill.phase.desc": "提高闪避率并延长受击保护，目前等级 {level}/4。", "skill.engine.name": "引擎超频", "skill.engine.desc": "提高移动速度与操控感，目前等级 {level}/5。", "skill.magnet.name": "磁力回收", "skill.magnet.desc": "扩大经验晶体吸附范围，目前等级 {level}/5。", "skill.drone.name": "环绕无人机", "skill.drone.desc": "增加环绕火力与接触伤害，目前等级 {level}/5。", "skill.emp.name": "电磁脉冲", "skill.emp.desc": "周期性释放范围伤害，目前等级 {level}/5。", "skill.siphonShield.name": "虹吸护盾", "skill.siphonShield.desc": "击杀回复少量护盾，目前等级 {level}/4。", "skill.pickupBurst.name": "拾取爆裂", "skill.pickupBurst.desc": "连续拾取后触发小范围爆裂，目前等级 {level}/4。", "skill.closeCombat.name": "近距离歼灭", "skill.closeCombat.desc": "对近距离敌人造成额外伤害，目前等级 {level}/4。", "skill.lowHpOverdrive.name": "临界火力", "skill.lowHpOverdrive.desc": "低血量时提高伤害与射速，目前等级 {level}/3。", "skill.activeBattery.name": "主动电池", "skill.activeBattery.desc": "击杀有概率缩短主动技能冷却，目前等级 {level}/4。", "skill.volatileRounds.name": "不稳定弹药", "skill.volatileRounds.desc": "子弹命中有概率造成小爆裂，目前等级 {level}/3。", "skill.railWeapon.name": "轨道长钉炮", "skill.railWeapon.desc": "并行发射高速穿透长钉，目前等级 {level}/4。", "skill.arcWeapon.name": "链式电弧", "skill.arcWeapon.desc": "并行释放跳跃电弧，目前等级 {level}/4。", "skill.flakWeapon.name": "绿焰霰弹", "skill.flakWeapon.desc": "并行发射近距离霰弹，目前等级 {level}/4。"
+  });
+  Object.assign(I18N.ja, {
+    "skill.pulse.name": "パルス砲強化", "skill.pulse.desc": "パルス砲のダメージと連射速度を上昇。現在レベル {level}/6。", "skill.split.name": "分裂レーザー", "skill.split.desc": "散射弾幕と貫通火力を追加。現在レベル {level}/5。", "skill.missile.name": "プラズマミサイル", "skill.missile.desc": "追尾ミサイルを解放または強化。現在レベル {level}/5。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "撃破時に星核爆発が発生することがある。現在レベル {level}/4。", "skill.crit.name": "クリティカル調整", "skill.crit.desc": "クリティカル率とダメージを上昇。現在レベル {level}/5。", "skill.shield.name": "シールド拡張", "skill.shield.desc": "最大シールドと回復速度を上昇。現在レベル {level}/5。", "skill.repair.name": "ナノ修復", "skill.repair.desc": "船体を継続修復。現在レベル {level}/4。", "skill.phase.name": "位相回避", "skill.phase.desc": "回避率を上げ、被弾保護を延長。現在レベル {level}/4。", "skill.engine.name": "エンジン過負荷", "skill.engine.desc": "移動速度と操作性を上昇。現在レベル {level}/5。", "skill.magnet.name": "磁力回収", "skill.magnet.desc": "経験結晶の吸引範囲を拡大。現在レベル {level}/5。", "skill.drone.name": "周回ドローン", "skill.drone.desc": "周回火力と接触ダメージを追加。現在レベル {level}/5。", "skill.emp.name": "電磁パルス", "skill.emp.desc": "周期的に範囲ダメージを放つ。現在レベル {level}/5。", "skill.siphonShield.name": "サイフォンシールド", "skill.siphonShield.desc": "撃破時に少量のシールドを回復。現在レベル {level}/4。", "skill.pickupBurst.name": "回収バースト", "skill.pickupBurst.desc": "連続回収で小範囲爆発を発動。現在レベル {level}/4。", "skill.closeCombat.name": "近距離殲滅", "skill.closeCombat.desc": "近距離の敵に追加ダメージ。現在レベル {level}/4。", "skill.lowHpOverdrive.name": "臨界火力", "skill.lowHpOverdrive.desc": "船体低下時にダメージと連射速度上昇。現在レベル {level}/3。", "skill.activeBattery.name": "アクティブ電池", "skill.activeBattery.desc": "撃破時にアクティブスキルの冷却を短縮することがある。現在レベル {level}/4。", "skill.volatileRounds.name": "不安定弾薬", "skill.volatileRounds.desc": "弾丸命中時に小爆発が発生することがある。現在レベル {level}/3。", "skill.railWeapon.name": "レールスパイク砲", "skill.railWeapon.desc": "高速貫通スパイクを並行発射。現在レベル {level}/4。", "skill.arcWeapon.name": "連鎖電弧", "skill.arcWeapon.desc": "跳躍する電弧を並行放出。現在レベル {level}/4。", "skill.flakWeapon.name": "緑炎散弾", "skill.flakWeapon.desc": "近距離散弾を並行発射。現在レベル {level}/4。"
+  });
   const DEFAULT_SETTINGS = {
     volume: 55,
     quality: "balanced",
+    language: "zh-CN",
     shake: true,
     motion: true,
     autoPerf: true
@@ -105,12 +213,12 @@
     mapSegmentDuration: 82
   };
   const WAVES = [
-    { from: 0, weights: { hunter: 1 }, message: "追獵機群接近" },
-    { from: 35, weights: { hunter: 0.78, tank: 0.22 }, message: "裝甲艦加入戰場" },
-    { from: 85, weights: { hunter: 0.56, tank: 0.27, shooter: 0.17 }, message: "散射機開始火力壓制" },
-    { from: 145, weights: { hunter: 0.42, tank: 0.22, shooter: 0.24, bomber: 0.12 }, message: "自爆蜂群突破防線" },
-    { from: 215, weights: { hunter: 0.34, tank: 0.2, shooter: 0.28, bomber: 0.18 }, message: "虛空訊號急遽增強" },
-    { from: 300, weights: { hunter: 0.28, tank: 0.2, shooter: 0.3, bomber: 0.22 }, message: "超載波次持續增強" }
+    { from: 0, weights: { hunter: 1 }, messageKey: "wave.0" },
+    { from: 35, weights: { hunter: 0.78, tank: 0.22 }, messageKey: "wave.1" },
+    { from: 85, weights: { hunter: 0.56, tank: 0.27, shooter: 0.17 }, messageKey: "wave.2" },
+    { from: 145, weights: { hunter: 0.42, tank: 0.22, shooter: 0.24, bomber: 0.12 }, messageKey: "wave.3" },
+    { from: 215, weights: { hunter: 0.34, tank: 0.2, shooter: 0.28, bomber: 0.18 }, messageKey: "wave.4" },
+    { from: 300, weights: { hunter: 0.28, tank: 0.2, shooter: 0.3, bomber: 0.22 }, messageKey: "wave.5" }
   ];
   const SOUND_COOLDOWNS = {
     hit: 0.06,
@@ -192,7 +300,8 @@
     backgroundCache: null,
     backgroundMapId: null,
     backgroundWidth: 0,
-    backgroundHeight: 0
+    backgroundHeight: 0,
+    mapTransitionPulse: 0
   };
 
   const input = {
@@ -203,26 +312,47 @@
   const records = loadRecords();
   const settings = loadSettings();
 
+  const artPalette = {
+    playerHull: "#e9fdff",
+    playerTrim: "#48f3ff",
+    playerCore: "#ffd36a",
+    playerDanger: "#ff4b66",
+    friendlyPulse: "#38f8ff",
+    friendlyRail: "#ffd36a",
+    friendlyFlak: "#65ffbd",
+    friendlyMissile: "#ff3df2",
+    xpCrystal: "#66ffb3",
+    shield: "#48f3ff",
+    enemyDanger: "#ff315f",
+    boss: "#ff2dff",
+    void: "#d84cff"
+  };
+
   const enemyTypes = {
-    hunter: { name: "追獵機", color: "#ff3b6b", hp: 18, speed: 90, radius: 14, damage: 10, xp: 5, score: 20 },
-    tank: { name: "裝甲艦", color: "#ffd166", hp: 70, speed: 45, radius: 23, damage: 18, xp: 12, score: 60 },
-    shooter: { name: "散射機", color: "#9d7bff", hp: 36, speed: 58, radius: 17, damage: 12, xp: 9, score: 45 },
-    bomber: { name: "自爆蜂群", color: "#ff8f3d", hp: 24, speed: 118, radius: 16, damage: 26, xp: 8, score: 40 },
-    wisp: { name: "星雲幽梭", color: "#48f3ff", hp: 28, speed: 104, radius: 13, damage: 11, xp: 8, score: 38 },
-    burrower: { name: "碎岩鑽機", color: "#c98743", hp: 54, speed: 74, radius: 19, damage: 17, xp: 11, score: 52 },
-    stormer: { name: "雷暴導體", color: "#d84cff", hp: 42, speed: 68, radius: 18, damage: 14, xp: 10, score: 50 },
-    sentinel: { name: "遺跡哨兵", color: "#65ffbd", hp: 64, speed: 52, radius: 21, damage: 16, xp: 13, score: 64 },
-    elite: { name: "菁英艦", color: "#38f8ff", hp: 150, speed: 62, radius: 30, damage: 22, xp: 35, score: 180 },
-    boss: { name: "虛空母艦", color: "#ff3df2", hp: 1200, speed: 32, radius: 58, damage: 28, xp: 180, score: 1500 }
+    hunter: { nameKey: "enemy.hunter", color: "#ff3b6b", hp: 18, speed: 90, radius: 14, damage: 10, xp: 5, score: 20 },
+    tank: { nameKey: "enemy.tank", color: "#ffd166", hp: 70, speed: 45, radius: 23, damage: 18, xp: 12, score: 60 },
+    shooter: { nameKey: "enemy.shooter", color: "#9d7bff", hp: 36, speed: 58, radius: 17, damage: 12, xp: 9, score: 45 },
+    bomber: { nameKey: "enemy.bomber", color: "#ff8f3d", hp: 24, speed: 118, radius: 16, damage: 26, xp: 8, score: 40 },
+    wisp: { nameKey: "enemy.wisp", color: "#48f3ff", hp: 28, speed: 104, radius: 13, damage: 11, xp: 8, score: 38 },
+    burrower: { nameKey: "enemy.burrower", color: "#c98743", hp: 54, speed: 74, radius: 19, damage: 17, xp: 11, score: 52 },
+    stormer: { nameKey: "enemy.stormer", color: "#d84cff", hp: 42, speed: 68, radius: 18, damage: 14, xp: 10, score: 50 },
+    sentinel: { nameKey: "enemy.sentinel", color: "#65ffbd", hp: 64, speed: 52, radius: 21, damage: 16, xp: 13, score: 64 },
+    elite: { nameKey: "enemy.elite", color: "#38f8ff", hp: 150, speed: 62, radius: 30, damage: 22, xp: 35, score: 180 },
+    boss: { nameKey: "enemy.boss", color: "#ff3df2", hp: 1200, speed: 32, radius: 58, damage: 28, xp: 180, score: 1500 }
   };
 
   const pickupTypes = {
-    xp: { color: "#66ffb3", radius: 5 },
+    xp: { color: artPalette.xpCrystal, radius: 5 },
     heal: { color: "#ff4b66", radius: 7 },
-    shield: { color: "#48f3ff", radius: 7 },
+    shield: { color: artPalette.shield, radius: 7 },
     bomb: { color: "#ffd36a", radius: 8 },
-    magnet: { color: "#d84cff", radius: 7 },
+    magnet: { color: artPalette.void, radius: 7 },
     overclock: { color: "#ffffff", radius: 7 }
+  };
+  const enemyProjectileTypes = {
+    normal: { color: artPalette.enemyDanger, core: "#fff0f4", warning: "rgba(255, 49, 95, 0.28)" },
+    storm: { color: "#ff9d2e", core: "#fff2c7", warning: "rgba(255, 157, 46, 0.3)" },
+    boss: { color: artPalette.boss, core: "#ffe5ff", warning: "rgba(255, 45, 255, 0.3)" }
   };
 
   const enemyVariants = {
@@ -231,16 +361,16 @@
   };
 
   const maps = [
-    { id: "nebula", name: "星雲殘域", colors: ["#12345f", "#06111f", "#02040a"], accent: "#48f3ff", enemyWeights: { wisp: 0.18 }, starTint: "#c7f7ff" },
-    { id: "asteroid", name: "碎岩環帶", colors: ["#3f2915", "#120c08", "#020202"], accent: "#ffd36a", enemyWeights: { burrower: 0.18 }, starTint: "#ffe2a3" },
-    { id: "storm", name: "離子風暴", colors: ["#28145c", "#09071c", "#01020b"], accent: "#d84cff", enemyWeights: { stormer: 0.18 }, starTint: "#e2c7ff" },
-    { id: "ruins", name: "機械遺跡", colors: ["#183b2f", "#071410", "#010706"], accent: "#65ffbd", enemyWeights: { sentinel: 0.18 }, starTint: "#baffdf" }
+    { id: "nebula", nameKey: "map.nebula", colors: ["#173d71", "#071626", "#01040b"], accent: "#48f3ff", secondaryAccent: "#8defff", fog: "rgba(72, 243, 255, 0.16)", dust: "rgba(199, 247, 255, 0.18)", debrisColor: "rgba(141, 239, 255, 0.2)", glyphColor: "rgba(72, 243, 255, 0.16)", pattern: "nebula", enemyWeights: { wisp: 0.18 }, starTint: "#c7f7ff" },
+    { id: "asteroid", nameKey: "map.asteroid", colors: ["#4a2e15", "#150d08", "#020202"], accent: "#ffd36a", secondaryAccent: "#c98743", fog: "rgba(255, 161, 82, 0.13)", dust: "rgba(255, 211, 106, 0.2)", debrisColor: "rgba(201, 135, 67, 0.32)", glyphColor: "rgba(255, 211, 106, 0.16)", pattern: "asteroid", enemyWeights: { burrower: 0.18 }, starTint: "#ffe2a3" },
+    { id: "storm", nameKey: "map.storm", colors: ["#33186f", "#0d0920", "#01020b"], accent: "#d84cff", secondaryAccent: "#ff9d2e", fog: "rgba(216, 76, 255, 0.16)", dust: "rgba(226, 199, 255, 0.18)", debrisColor: "rgba(255, 157, 46, 0.22)", glyphColor: "rgba(216, 76, 255, 0.2)", pattern: "storm", enemyWeights: { stormer: 0.18 }, starTint: "#e2c7ff" },
+    { id: "ruins", nameKey: "map.ruins", colors: ["#1d4738", "#081813", "#010706"], accent: "#65ffbd", secondaryAccent: "#48f3ff", fog: "rgba(101, 255, 189, 0.12)", dust: "rgba(186, 255, 223, 0.16)", debrisColor: "rgba(72, 243, 255, 0.18)", glyphColor: "rgba(101, 255, 189, 0.2)", pattern: "ruins", enemyWeights: { sentinel: 0.18 }, starTint: "#baffdf" }
   ];
 
   const randomEvents = [
     {
       id: "xpComet",
-      text: "經驗彗星掠過：晶體雨散落",
+      textKey: "event.xpComet",
       variant: "success",
       weight: () => 1.2,
       trigger: () => {
@@ -249,7 +379,7 @@
     },
     {
       id: "eliteSignal",
-      text: "菁英訊號偏移：小隊突入",
+      textKey: "event.eliteSignal",
       variant: "warning",
       weight: context => context.pressure > 0.82 ? 0.35 : 0.9,
       trigger: () => {
@@ -259,7 +389,7 @@
     },
     {
       id: "supplyDrop",
-      text: "補給艙解鎖：戰術物資投放",
+      textKey: "event.supplyDrop",
       variant: "success",
       weight: context => context.hpRatio < 0.55 || context.shieldRatio < 0.35 ? 1.25 : 0.65,
       trigger: () => {
@@ -268,7 +398,7 @@
     },
     {
       id: "crystalBloom",
-      text: "晶體綻放：多點經驗回收",
+      textKey: "event.crystalBloom",
       variant: "success",
       weight: () => 0.82,
       trigger: () => {
@@ -277,28 +407,28 @@
     },
     {
       id: "unstableCore",
-      text: "不穩定核心出現：可觸發爆裂",
+      textKey: "event.unstableCore",
       variant: "warning",
       weight: context => context.pressure > 0.72 ? 0.95 : 0.55,
       trigger: () => dropPickup("bomb", rand(90, state.width - 90), rand(90, state.height - 90), 2, 1)
     },
     {
       id: "magnetPulse",
-      text: "磁場脈衝：回收效率提升",
+      textKey: "event.magnetPulse",
       variant: "info",
       weight: () => 0.68,
       trigger: () => dropPickup("magnet", rand(90, state.width - 90), rand(90, state.height - 90), 1, 1)
     },
     {
       id: "overclockWindow",
-      text: "超頻窗口：武裝核心升溫",
+      textKey: "event.overclockWindow",
       variant: "success",
       weight: context => context.bossActive ? 0.85 : 0.52,
       trigger: () => dropPickup("overclock", rand(90, state.width - 90), rand(90, state.height - 90), 1, 1)
     },
     {
       id: "voidTurbulence",
-      text: "虛空亂流：敵群路徑偏移",
+      textKey: "event.voidTurbulence",
       variant: "info",
       weight: context => context.pressure > 0.7 ? 0.8 : 0.48,
       trigger: () => {
@@ -316,64 +446,65 @@
   const activeSkills = [
     {
       id: "voidLance",
-      name: "虛空長矛",
-      category: "主動技能",
+      nameKey: "active.voidLance.name",
+      categoryKey: "cat.active",
       cooldown: level => Math.max(5.8, 9.5 - level * 0.8),
-      desc: level => `左鍵發射穿透長矛，對路徑敵人造成高額傷害，目前等級 ${level}/4。`
+      descKey: "active.voidLance.desc"
     },
     {
       id: "gravityWell",
-      name: "重力井",
-      category: "主動技能",
+      nameKey: "active.gravityWell.name",
+      categoryKey: "cat.active",
       cooldown: level => Math.max(7.5, 12 - level * 0.9),
-      desc: level => `左鍵在鼠標位置生成牽引力場並持續傷害，目前等級 ${level}/4。`
+      descKey: "active.gravityWell.desc"
     },
     {
       id: "phaseBlink",
-      name: "相位閃爍",
-      category: "主動技能",
+      nameKey: "active.phaseBlink.name",
+      categoryKey: "cat.active",
       cooldown: level => Math.max(4.8, 8.5 - level * 0.7),
-      desc: level => `左鍵向鼠標方向短距離閃爍並釋放衝擊波，目前等級 ${level}/4。`
+      descKey: "active.phaseBlink.desc"
     },
     {
       id: "ionStorm",
-      name: "離子風暴",
-      category: "主動技能",
+      nameKey: "active.ionStorm.name",
+      categoryKey: "cat.active",
       cooldown: level => Math.max(8.5, 13.5 - level),
-      desc: level => `左鍵呼叫多道離子雷擊打擊附近敵人，目前等級 ${level}/4。`
+      descKey: "active.ionStorm.desc"
     }
   ];
 
   const skills = [
-    { id: "pulse", name: "脈衝炮強化", category: "攻擊", rarity: "common", tags: ["attack", "weapon"], weight: 1.1, max: 6, desc: level => `脈衝炮傷害與射速提升，目前等級 ${level}/6。`, apply: p => { p.pulseLevel++; p.damageMult += 0.12; p.fireRateMult += 0.08; } },
-    { id: "split", name: "分裂雷射", category: "攻擊", rarity: "common", tags: ["attack", "weapon"], weight: 1, max: 5, desc: level => `增加散射彈幕與穿透火力，目前等級 ${level}/5。`, apply: p => { p.splitLevel++; p.damageMult += 0.05; } },
-    { id: "missile", name: "等離子飛彈", category: "攻擊", rarity: "rare", tags: ["attack", "weapon"], weight: 0.86, max: 5, desc: level => `啟用或強化追蹤飛彈，目前等級 ${level}/5。`, apply: p => { p.missileLevel++; } },
-    { id: "nova", name: "星核爆裂", category: "攻擊", rarity: "rare", tags: ["attack", "trigger"], weight: 0.78, max: 4, desc: level => `擊殺時機率引爆星核，目前等級 ${level}/4。`, apply: p => { p.novaLevel++; } },
-    { id: "crit", name: "暴擊校準", category: "攻擊", rarity: "common", tags: ["attack"], weight: 0.94, max: 5, desc: level => `提高暴擊率與暴擊傷害，目前等級 ${level}/5。`, apply: p => { p.crit += 0.08; p.critDamage += 0.12; } },
-    { id: "shield", name: "護盾擴容", category: "防禦", rarity: "common", tags: ["defense"], weight: 1, max: 5, desc: level => `提升最大護盾與回復速度，目前等級 ${level}/5。`, apply: p => { p.shieldLevel++; p.maxShield += 18; p.shieldRegen += 1.4; p.shield = p.maxShield; } },
-    { id: "repair", name: "奈米修復", category: "防禦", rarity: "common", tags: ["defense"], weight: 0.9, max: 4, desc: level => `持續修復艦體，目前等級 ${level}/4。`, apply: p => { p.repairLevel++; p.hp = Math.min(p.maxHp, p.hp + 25); } },
-    { id: "phase", name: "相位閃避", category: "防禦", rarity: "rare", tags: ["defense", "mobility"], weight: 0.72, max: 4, desc: level => `提高閃避率並延長受擊保護，目前等級 ${level}/4。`, apply: p => { p.dodge += 0.07; p.invulnBonus += 0.08; } },
-    { id: "engine", name: "引擎超頻", category: "機動", rarity: "common", tags: ["mobility"], weight: 0.92, max: 5, desc: level => `提高移動速度與操控感，目前等級 ${level}/5。`, apply: p => { p.speed += 22; } },
-    { id: "magnet", name: "磁力回收", category: "機動", rarity: "common", tags: ["pickup"], weight: 0.9, max: 5, desc: level => `擴大經驗晶體吸附範圍，目前等級 ${level}/5。`, apply: p => { p.pickupRange += 38; } },
-    { id: "drone", name: "環繞無人機", category: "特殊", rarity: "rare", tags: ["attack", "special"], weight: 0.76, max: 5, desc: level => `增加環繞火力與接觸傷害，目前等級 ${level}/5。`, apply: p => { p.droneLevel++; } },
-    { id: "emp", name: "電磁脈衝", category: "特殊", rarity: "rare", tags: ["attack", "special"], weight: 0.72, max: 5, desc: level => `週期性釋放範圍傷害，目前等級 ${level}/5。`, apply: p => { p.empLevel++; p.empCooldown = Math.max(2.2, p.empCooldown - 0.18); } },
-    { id: "siphonShield", name: "虹吸護盾", category: "Build", rarity: "rare", tags: ["defense", "trigger"], weight: 0.7, max: 4, desc: level => `擊殺回復少量護盾，目前等級 ${level}/4。`, apply: p => { p.siphonLevel++; } },
-    { id: "pickupBurst", name: "拾取爆裂", category: "Build", rarity: "rare", tags: ["pickup", "attack"], weight: 0.68, max: 4, desc: level => `連續拾取後觸發小範圍爆裂，目前等級 ${level}/4。`, apply: p => { p.pickupBurstLevel++; } },
-    { id: "closeCombat", name: "近距離殲滅", category: "Build", rarity: "common", tags: ["attack"], weight: 0.82, max: 4, desc: level => `對近距離敵人造成額外傷害，目前等級 ${level}/4。`, apply: p => { p.closeCombatLevel++; } },
-    { id: "lowHpOverdrive", name: "臨界火力", category: "Build", rarity: "epic", tags: ["attack", "defense"], weight: 0.46, max: 3, desc: level => `低血量時提高傷害與射速，目前等級 ${level}/3。`, apply: p => { p.lowHpOverdriveLevel++; } },
-    { id: "activeBattery", name: "主動電池", category: "Build", rarity: "rare", tags: ["active", "trigger"], weight: 0.72, max: 4, desc: level => `擊殺有機率縮短主動技能冷卻，目前等級 ${level}/4。`, apply: p => { p.activeBatteryLevel++; } },
-    { id: "volatileRounds", name: "不穩定彈藥", category: "Build", rarity: "epic", tags: ["attack", "trigger"], weight: 0.42, max: 3, desc: level => `子彈命中有機率造成小爆裂，目前等級 ${level}/3。`, apply: p => { p.volatileRoundsLevel++; } },
-    { id: "railWeapon", name: "軌道長釘炮", category: "主武器", rarity: "rare", tags: ["attack", "weapon"], weight: 0.72, max: 4, desc: level => `並行發射高速穿透長釘，目前等級 ${level}/4。`, apply: p => { p.primaryWeapons.rail++; } },
-    { id: "arcWeapon", name: "鏈式電弧", category: "主武器", rarity: "rare", tags: ["attack", "weapon"], weight: 0.68, max: 4, desc: level => `並行釋放跳躍電弧，目前等級 ${level}/4。`, apply: p => { p.primaryWeapons.arc++; } },
-    { id: "flakWeapon", name: "綠焰霰彈", category: "主武器", rarity: "common", tags: ["attack", "weapon"], weight: 0.78, max: 4, desc: level => `並行發射近距離霰彈，目前等級 ${level}/4。`, apply: p => { p.primaryWeapons.flak++; } }
+    { id: "pulse", categoryKey: "cat.attack", rarity: "common", tags: ["attack", "weapon"], weight: 1.1, max: 6, apply: p => { p.pulseLevel++; p.damageMult += 0.12; p.fireRateMult += 0.08; } },
+    { id: "split", categoryKey: "cat.attack", rarity: "common", tags: ["attack", "weapon"], weight: 1, max: 5, apply: p => { p.splitLevel++; p.damageMult += 0.05; } },
+    { id: "missile", categoryKey: "cat.attack", rarity: "rare", tags: ["attack", "weapon"], weight: 0.86, max: 5, apply: p => { p.missileLevel++; } },
+    { id: "nova", categoryKey: "cat.attack", rarity: "rare", tags: ["attack", "trigger"], weight: 0.78, max: 4, apply: p => { p.novaLevel++; } },
+    { id: "crit", categoryKey: "cat.attack", rarity: "common", tags: ["attack"], weight: 0.94, max: 5, apply: p => { p.crit += 0.08; p.critDamage += 0.12; } },
+    { id: "shield", categoryKey: "cat.defense", rarity: "common", tags: ["defense"], weight: 1, max: 5, apply: p => { p.shieldLevel++; p.maxShield += 18; p.shieldRegen += 1.4; p.shield = p.maxShield; } },
+    { id: "repair", categoryKey: "cat.defense", rarity: "common", tags: ["defense"], weight: 0.9, max: 4, apply: p => { p.repairLevel++; p.hp = Math.min(p.maxHp, p.hp + 25); } },
+    { id: "phase", categoryKey: "cat.defense", rarity: "rare", tags: ["defense", "mobility"], weight: 0.72, max: 4, apply: p => { p.dodge += 0.07; p.invulnBonus += 0.08; } },
+    { id: "engine", categoryKey: "cat.mobility", rarity: "common", tags: ["mobility"], weight: 0.92, max: 5, apply: p => { p.speed += 22; } },
+    { id: "magnet", categoryKey: "cat.mobility", rarity: "common", tags: ["pickup"], weight: 0.9, max: 5, apply: p => { p.pickupRange += 38; } },
+    { id: "drone", categoryKey: "cat.special", rarity: "rare", tags: ["attack", "special"], weight: 0.76, max: 5, apply: p => { p.droneLevel++; } },
+    { id: "emp", categoryKey: "cat.special", rarity: "rare", tags: ["attack", "special"], weight: 0.72, max: 5, apply: p => { p.empLevel++; p.empCooldown = Math.max(2.2, p.empCooldown - 0.18); } },
+    { id: "siphonShield", categoryKey: "cat.build", rarity: "rare", tags: ["defense", "trigger"], weight: 0.7, max: 4, apply: p => { p.siphonLevel++; } },
+    { id: "pickupBurst", categoryKey: "cat.build", rarity: "rare", tags: ["pickup", "attack"], weight: 0.68, max: 4, apply: p => { p.pickupBurstLevel++; } },
+    { id: "closeCombat", categoryKey: "cat.build", rarity: "common", tags: ["attack"], weight: 0.82, max: 4, apply: p => { p.closeCombatLevel++; } },
+    { id: "lowHpOverdrive", categoryKey: "cat.build", rarity: "epic", tags: ["attack", "defense"], weight: 0.46, max: 3, apply: p => { p.lowHpOverdriveLevel++; } },
+    { id: "activeBattery", categoryKey: "cat.build", rarity: "rare", tags: ["active", "trigger"], weight: 0.72, max: 4, apply: p => { p.activeBatteryLevel++; } },
+    { id: "volatileRounds", categoryKey: "cat.build", rarity: "epic", tags: ["attack", "trigger"], weight: 0.42, max: 3, apply: p => { p.volatileRoundsLevel++; } },
+    { id: "railWeapon", categoryKey: "cat.primary", rarity: "rare", tags: ["attack", "weapon"], weight: 0.72, max: 4, apply: p => { p.primaryWeapons.rail++; } },
+    { id: "arcWeapon", categoryKey: "cat.primary", rarity: "rare", tags: ["attack", "weapon"], weight: 0.68, max: 4, apply: p => { p.primaryWeapons.arc++; } },
+    { id: "flakWeapon", categoryKey: "cat.primary", rarity: "common", tags: ["attack", "weapon"], weight: 0.78, max: 4, apply: p => { p.primaryWeapons.flak++; } }
   ];
 
   function normalizeRecords(value) {
+    value = value || {};
     return {
-      score: Number.isFinite(value?.score) ? value.score : 0,
-      time: Number.isFinite(value?.time) ? value.time : 0,
-      kills: Number.isFinite(value?.kills) ? value.kills : 0,
-      level: Number.isFinite(value?.level) ? value.level : 1
+      score: Number.isFinite(value.score) ? value.score : 0,
+      time: Number.isFinite(value.time) ? value.time : 0,
+      kills: Number.isFinite(value.kills) ? value.kills : 0,
+      level: Number.isFinite(value.level) ? value.level : 1
     };
   }
 
@@ -386,12 +517,14 @@
   }
 
   function normalizeSettings(value) {
+    value = value || {};
     return {
-      volume: clamp(Number.isFinite(value?.volume) ? value.volume : DEFAULT_SETTINGS.volume, 0, 100),
-      quality: QUALITY_PRESETS[value?.quality] ? value.quality : DEFAULT_SETTINGS.quality,
-      shake: typeof value?.shake === "boolean" ? value.shake : DEFAULT_SETTINGS.shake,
-      motion: typeof value?.motion === "boolean" ? value.motion : DEFAULT_SETTINGS.motion,
-      autoPerf: typeof value?.autoPerf === "boolean" ? value.autoPerf : DEFAULT_SETTINGS.autoPerf
+      volume: clamp(Number.isFinite(value.volume) ? value.volume : DEFAULT_SETTINGS.volume, 0, 100),
+      quality: QUALITY_PRESETS[value.quality] ? value.quality : DEFAULT_SETTINGS.quality,
+      language: LANGUAGES.includes(value.language) ? value.language : DEFAULT_SETTINGS.language,
+      shake: typeof value.shake === "boolean" ? value.shake : DEFAULT_SETTINGS.shake,
+      motion: typeof value.motion === "boolean" ? value.motion : DEFAULT_SETTINGS.motion,
+      autoPerf: typeof value.autoPerf === "boolean" ? value.autoPerf : DEFAULT_SETTINGS.autoPerf
     };
   }
 
@@ -407,7 +540,7 @@
     try {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     } catch {
-      showToast("設定儲存失敗，本次仍會套用", 1.8, "warning");
+      showToast(t("toast.saveSettingsFailed"), 1.8, "warning");
     }
   }
 
@@ -415,7 +548,69 @@
     return QUALITY_PRESETS[settings.quality] || QUALITY_PRESETS.balanced;
   }
 
+  function t(key, replacements) {
+    const bundle = I18N[settings.language] || I18N[DEFAULT_SETTINGS.language];
+    let text = bundle[key] || I18N[DEFAULT_SETTINGS.language][key] || key;
+    if (replacements) {
+      Object.keys(replacements).forEach(name => {
+        text = text.replaceAll(`{${name}}`, replacements[name]);
+      });
+    }
+    return text;
+  }
+
+  function getActiveSkillName(skill) {
+    return skill ? t(skill.nameKey || `active.${skill.id}.name`) : "";
+  }
+
+  function getActiveSkillDescription(skill, level) {
+    return skill ? t(skill.descKey || `active.${skill.id}.desc`, { level }) : "";
+  }
+
+  function getSkillName(skill) {
+    return t(skill.nameKey || `skill.${skill.id}.name`);
+  }
+
+  function getSkillCategory(skill) {
+    return t(skill.categoryKey || "cat.build");
+  }
+
+  function getSkillDescription(skill, level) {
+    if (skill.desc) return skill.desc(level);
+    return t(skill.descKey || `skill.${skill.id}.desc`, { level });
+  }
+
+  function getMapName(map = getCurrentMap()) {
+    return t(map.nameKey || `map.${map.id}`);
+  }
+
+  function applyLanguage() {
+    const meta = LANGUAGE_META[settings.language] || LANGUAGE_META[DEFAULT_SETTINGS.language];
+    document.documentElement.lang = meta.htmlLang;
+    document.title = meta.title;
+    canvas.setAttribute("aria-label", meta.canvasLabel);
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+      element.textContent = t(element.dataset.i18n);
+    });
+    document.querySelector(".brand-mark").textContent = t("menu.title");
+    updateHudLabels();
+    updateMenuState();
+    if (state.player) updateHud();
+  }
+
+  function updateHudLabels() {
+    document.querySelector(".stat-line span:nth-child(1)").firstChild.textContent = `${t("hud.time")} `;
+    document.querySelector(".stat-line span:nth-child(2)").firstChild.textContent = `${t("hud.kills")} `;
+    document.querySelector(".stat-line span:nth-child(3)").firstChild.textContent = `${t("hud.level")} `;
+    document.querySelector(".stat-line span:nth-child(4)").firstChild.textContent = `${t("hud.score")} `;
+    document.querySelector(".stat-line span:nth-child(5)").firstChild.textContent = `${t("hud.map")} `;
+    document.querySelector(".meter-group:nth-child(1) .meter-label span").textContent = t("hud.hp");
+    document.querySelector(".meter-group:nth-child(2) .meter-label span").textContent = t("hud.shield");
+    document.querySelector(".xp-meter-group .meter-label span").textContent = t("hud.xp");
+  }
+
   function syncSettingsUi() {
+    ui.languageSelect.value = settings.language;
     ui.volumeControl.value = Math.round(settings.volume).toString();
     ui.qualitySelect.value = settings.quality;
     ui.shakeToggle.checked = settings.shake;
@@ -425,7 +620,7 @@
 
   function applySettings({ resizeCanvas = false } = {}) {
     const reducedBySystem = mediaQuery.matches;
-    const pressureReduced = settings.autoPerf && (state.enemies.length > BALANCE.enemyMaxCap * 0.72 || state.projectiles.length + state.enemyProjectiles.length > BALANCE.maxPlayerProjectiles + BALANCE.maxEnemyProjectiles * 0.65);
+    const pressureReduced = settings.autoPerf && (state.enemies.length > BALANCE.enemyMaxCap * 0.72 || state.projectiles.length + state.enemyProjectiles.length > (BALANCE.maxPlayerProjectiles + BALANCE.maxEnemyProjectiles) * 0.65);
     motion.reduced = reducedBySystem || !settings.motion || settings.quality === "performance" || pressureReduced;
     motion.shakeScale = settings.shake ? 0.35 : 0;
     motion.shakeMax = settings.shake ? 4.5 : 0;
@@ -453,7 +648,7 @@
       records.level = Math.max(records.level, p ? p.level : 1);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
     } catch {
-      showToast("紀錄儲存失敗，但本局可繼續遊玩");
+      showToast(t("toast.saveRecordsFailed"));
     }
   }
 
@@ -480,7 +675,10 @@
       y: Math.random() * state.height,
       size: rand(0.6, 2.2),
       speed: rand(4, 22),
-      alpha: rand(0.25, 0.9)
+      alpha: rand(0.25, 0.9),
+      layer: rand(0.4, 1.4),
+      twinkle: rand(0, TAU),
+      drift: rand(-4, 4)
     }));
   }
 
@@ -573,6 +771,7 @@
     state.shake = 0;
     state.levelPulse = 0;
     state.hitPulse = 0;
+    state.mapTransitionPulse = 0;
     state.activeToastCooldown = 0;
     state.currentUpgrades = [];
     state.currentWaveIndex = 0;
@@ -593,7 +792,7 @@
     resetGame();
     setMode("playing");
     updateMenuState();
-    showToast("星艦啟動：突破封鎖線", 2.1, "success");
+    showToast(t("toast.start"), 2.1, "success");
   }
 
   function continueGame() {
@@ -601,7 +800,7 @@
     initAudio();
     setMode("playing");
     updateHud();
-    showToast("繼續作戰：戰術系統恢復", 1.6, "success");
+    showToast(t("toast.continue"), 1.6, "success");
   }
 
   function returnToMenu() {
@@ -706,7 +905,7 @@
     ui.killsValue.textContent = state.kills.toString();
     ui.levelValue.textContent = p.level.toString();
     ui.scoreValue.textContent = Math.floor(state.score).toString();
-    ui.mapValue.textContent = getCurrentMap().name;
+    ui.mapValue.textContent = getMapName();
     ui.hpText.textContent = `${Math.ceil(p.hp)} / ${p.maxHp}`;
     ui.shieldText.textContent = `${Math.ceil(p.shield)} / ${p.maxShield}`;
     ui.xpText.textContent = `${Math.floor(p.xp)} / ${p.xpToNext}`;
@@ -720,14 +919,15 @@
   function updateActiveSkillHud(p) {
     const skill = getActiveSkill(p.activeSkillId);
     if (!skill) {
-      ui.activeSkillName.textContent = "主動技能未同步";
-      ui.activeSkillText.textContent = "升級獲取";
+      ui.activeSkillName.textContent = t("hud.activeNone");
+      ui.activeSkillText.textContent = t("hud.activeAcquire");
       ui.activeSkillFill.style.width = "0%";
       return;
     }
-    ui.activeSkillName.textContent = `${skill.name} Lv.${p.activeSkillLevel}`;
-    if (p.activeCharges > 0) {
-      ui.activeSkillText.textContent = "左鍵就緒";
+    ui.activeSkillName.textContent = `${getActiveSkillName(skill)} ${t("common.levelShort")}${p.activeSkillLevel}`;
+    normalizeActiveSkillState(p);
+    if (isActiveSkillReady(p)) {
+      ui.activeSkillText.textContent = t("hud.activeReady");
       ui.activeSkillFill.style.width = "100%";
       return;
     }
@@ -742,8 +942,8 @@
     gameShell.classList.toggle("is-critical", Boolean(p && p.hp / p.maxHp < 0.3));
     gameShell.classList.toggle("is-boss-alert", bossActive);
     gameShell.classList.toggle("is-shield-down", Boolean(p && p.shield <= 0));
-    gameShell.classList.toggle("is-active-ready", Boolean(p && p.activeSkillId && p.activeCharges > 0));
-    gameShell.classList.toggle("is-active-cooling", Boolean(p && p.activeSkillId && p.activeCharges <= 0));
+    gameShell.classList.toggle("is-active-ready", isActiveSkillReady(p));
+    gameShell.classList.toggle("is-active-cooling", Boolean(p && p.activeSkillId && !isActiveSkillReady(p)));
   }
 
   function getMoveVector() {
@@ -769,8 +969,9 @@
     state.randomEventTimer -= dt;
     state.mapTimer -= dt;
     state.shake = Math.max(0, state.shake - dt * motion.shakeDecay);
-    state.levelPulse = Math.max(0, state.levelPulse - dt * 1.8);
-    state.hitPulse = Math.max(0, state.hitPulse - dt * 2.8);
+    state.levelPulse = Math.max(0, state.levelPulse - dt * 1.5);
+    state.hitPulse = Math.max(0, state.hitPulse - dt * 2.6);
+    state.mapTransitionPulse = Math.max(0, state.mapTransitionPulse - dt * 0.8);
     state.activeToastCooldown = Math.max(0, state.activeToastCooldown - dt);
     if (settings.autoPerf) applySettings();
     updatePlayer(dt);
@@ -810,9 +1011,7 @@
     p.arcTimer -= dt;
     p.flakTimer -= dt;
     if (p.activeCooldown > 0) p.activeCooldown = Math.max(0, p.activeCooldown - dt);
-    if (p.activeSkillId && p.activeCharges < p.activeMaxCharges && p.activeCooldown <= 0) {
-      p.activeCharges = p.activeMaxCharges;
-    }
+    normalizeActiveSkillState(p);
     p.shield = Math.min(p.maxShield, p.shield + p.shieldRegen * dt);
     if (p.repairLevel > 0) p.hp = Math.min(p.maxHp, p.hp + p.repairLevel * 1.1 * dt);
     if (p.empLevel > 0 && p.empTimer <= 0) triggerEmp();
@@ -905,11 +1104,20 @@
     const chained = new Set();
     const jumps = 1 + p.primaryWeapons.arc;
     for (let i = 0; i < jumps && current; i++) {
+      const origin = current;
       chained.add(current);
       damageEnemy(current, damage.amount * (1 - i * 0.12), damage.crit);
-      if (!motion.reduced) createRing(current.x, current.y, 18 + i * 3, "#d84cff");
+      if (!motion.reduced && !isPerfStressed()) createRing(current.x, current.y, 18 + i * 3, "#d84cff");
       const maxChainDistance = 145 * 145;
-      current = state.enemies.find(enemy => !chained.has(enemy) && distanceSquared(enemy, current) < maxChainDistance);
+      const chainLimit = isPerfStressed() ? Math.min(18, state.enemies.length) : state.enemies.length;
+      current = null;
+      for (let j = 0; j < chainLimit; j++) {
+        const enemy = state.enemies[j];
+        if (!chained.has(enemy) && distanceSquared(enemy, origin) < maxChainDistance) {
+          current = enemy;
+          break;
+        }
+      }
     }
   }
 
@@ -995,6 +1203,7 @@
     state.enemies.forEach(enemy => {
       enemy.flash = Math.max(0, enemy.flash - dt);
       enemy.shootTimer -= dt;
+      enemy._sepTick = (enemy._sepTick || 0) + 1;
       const dx = p.x - enemy.x;
       const dy = p.y - enemy.y;
       const dist = Math.hypot(dx, dy) || 1;
@@ -1017,7 +1226,7 @@
         enemy.x += (dx / dist) * enemy.speed * dt;
         enemy.y += (dy / dist) * enemy.speed * dt;
       }
-      separateEnemy(enemy, dt);
+      if (!isPerfStressed() || enemy._sepTick % 2 === 0) separateEnemy(enemy, dt);
       if ((enemy.type === "shooter" || enemy.type === "elite" || enemy.type === "boss" || enemy.type === "stormer" || enemy.type === "sentinel") && enemy.shootTimer <= 0) {
         fireEnemyProjectile(enemy);
         enemy.shootTimer = enemy.type === "boss" ? Math.max(0.55, 1.2 - (1 - enemy.hp / enemy.maxHp) * 0.55) : rand(1.3, 2.8) / difficulty;
@@ -1048,8 +1257,12 @@
     let pushX = 0;
     let pushY = 0;
     let checks = 0;
-    for (const other of state.enemies) {
-      if (other === enemy || checks > 10) continue;
+    const maxChecks = isPerfStressed() ? 5 : 10;
+    const start = state.enemies.length > 1 ? Math.floor(((enemy.x * 13 + enemy.y * 7) % state.enemies.length + state.enemies.length) % state.enemies.length) : 0;
+    const length = state.enemies.length;
+    for (let i = 0; i < length && checks <= maxChecks; i++) {
+      const other = state.enemies[(start + i) % length];
+      if (other === enemy) continue;
       const minDistance = enemy.radius + other.radius;
       const dx = enemy.x - other.x;
       const dy = enemy.y - other.y;
@@ -1065,6 +1278,7 @@
   }
 
   function updateProjectiles(dt) {
+    const activeEnemies = state.enemies.filter(enemy => enemy.x > -90 && enemy.y > -90 && enemy.x < state.width + 90 && enemy.y < state.height + 90);
     state.projectiles.forEach(projectile => {
       projectile.life -= dt;
       if (projectile.type === "missile") {
@@ -1081,11 +1295,13 @@
       }
       projectile.x += projectile.vx * dt;
       projectile.y += projectile.vy * dt;
-      for (const enemy of state.enemies) {
+      for (const enemy of activeEnemies) {
         if (projectile.life <= 0) break;
-        if (distanceSquared(projectile, enemy) < (projectile.radius + enemy.radius) * (projectile.radius + enemy.radius)) {
+        const hitRange = projectile.radius + enemy.radius;
+        if (Math.abs(projectile.x - enemy.x) > hitRange || Math.abs(projectile.y - enemy.y) > hitRange) continue;
+        if (distanceSquared(projectile, enemy) < hitRange * hitRange) {
           damageEnemy(enemy, projectile.damage.amount, projectile.damage.crit);
-          if (state.player.volatileRoundsLevel > 0 && Math.random() < 0.035 + state.player.volatileRoundsLevel * 0.025 && !motion.reduced && state.particles.length < MAX_PARTICLES * 0.75) {
+          if (state.player.volatileRoundsLevel > 0 && Math.random() < 0.025 + state.player.volatileRoundsLevel * 0.018 && !isPerfStressed() && state.particles.length < getParticleLimit() * 0.75) {
             createExplosion(enemy.x, enemy.y, 38 + state.player.volatileRoundsLevel * 8, 10 + state.player.volatileRoundsLevel * 5);
           }
           projectile.pierce--;
@@ -1115,6 +1331,7 @@
     const p = state.player;
     const count = enemy.type === "boss" ? 9 : enemy.type === "elite" ? 3 : enemy.type === "sentinel" ? 2 : 1;
     const base = angleTo(enemy, p);
+    const projectileStyle = enemy.type === "boss" ? enemyProjectileTypes.boss : enemy.type === "stormer" || enemy.type === "sentinel" ? enemyProjectileTypes.storm : enemyProjectileTypes.normal;
     for (let i = 0; i < count; i++) {
       const spread = count === 1 ? 0 : (i - (count - 1) / 2) * 0.18;
       const a = base + spread;
@@ -1126,7 +1343,9 @@
         radius: enemy.type === "boss" ? 7 : enemy.type === "stormer" ? 4 : 5,
         damage: enemy.type === "boss" ? 14 : enemy.type === "stormer" ? 8 : 10,
         life: 4,
-        color: enemy.color
+        color: projectileStyle.color,
+        coreColor: projectileStyle.core,
+        warningColor: projectileStyle.warning
       });
       if (state.enemyProjectiles.length > BALANCE.maxEnemyProjectiles) state.enemyProjectiles.shift();
     }
@@ -1207,22 +1426,23 @@
     const nextIndex = WAVES.findIndex((wave, index) => index > state.currentWaveIndex && state.elapsed >= wave.from);
     if (nextIndex === -1) return;
     state.currentWaveIndex = nextIndex;
-    showToast(WAVES[nextIndex].message, 2.5, "warning");
+    showToast(t(WAVES[nextIndex].messageKey), 2.5, "warning");
   }
 
   function updateMapDirector() {
     if (state.mapTimer > 0) return;
     const pool = maps.map((_, index) => index).filter(index => index !== state.currentMapIndex);
-    const nextIndex = pool[Math.floor(Math.random() * pool.length)] ?? 0;
-    state.currentMapIndex = nextIndex;
+    const nextIndex = pool[Math.floor(Math.random() * pool.length)];
+    state.currentMapIndex = Number.isFinite(nextIndex) ? nextIndex : 0;
     state.mapTimer = BALANCE.mapSegmentDuration + rand(-12, 16);
     state.mapHistory.push(nextIndex);
     if (state.mapHistory.length > 6) state.mapHistory.shift();
     const map = getCurrentMap();
     createStars();
     invalidateBackgroundCache();
-    addEventMessage(`航道切入：${map.name}`, "info");
+    addEventMessage(t("map.enter", { name: getMapName(map) }), "info");
     state.levelPulse = 1;
+    state.mapTransitionPulse = 1;
   }
 
   function getCurrentMap() {
@@ -1255,7 +1475,7 @@
     const p = state.player;
     if (!event || !p) return;
     state.randomEvent = event.id;
-    addEventMessage(event.text, event.variant);
+    addEventMessage(t(event.textKey), event.variant);
     event.trigger(context);
   }
 
@@ -1273,14 +1493,14 @@
     }
     if (state.eliteTimer <= 0) {
       spawnEnemy("elite");
-      showToast("菁英艦進入戰場", 2.1, "warning");
+      showToast(t("toast.elite"), 2.1, "warning");
       state.eliteTimer = Math.max(BALANCE.eliteMinimumInterval, BALANCE.eliteBaseInterval - state.elapsed / 14);
     }
     if (!state.bossSpawned && state.elapsed >= BALANCE.bossSpawnTime) {
       spawnEnemy("boss");
       state.bossSpawned = true;
       state.shake = Math.max(state.shake, 4.2);
-      showToast("警告：虛空母艦登場", 3, "danger");
+      showToast(t("toast.boss"), 3, "danger");
       playSound("boss");
     }
   }
@@ -1336,7 +1556,7 @@
     const bossScale = type === "boss" ? 0.95 + Math.min(0.45, state.elapsed / 900) : 1;
     const enemy = {
       type,
-      name: spec.name,
+      name: t(spec.nameKey),
       x: pos.x,
       y: pos.y,
       radius: spec.radius,
@@ -1388,11 +1608,11 @@
 
   function damageEnemy(enemy, amount, crit) {
     const p = state.player;
-    const closeBonus = p?.closeCombatLevel > 0 && distance(p, enemy) < 170 ? 1 + p.closeCombatLevel * 0.1 : 1;
+    const closeBonus = p && p.closeCombatLevel > 0 && distance(p, enemy) < 170 ? 1 + p.closeCombatLevel * 0.1 : 1;
     enemy.hp -= amount * closeBonus;
     enemy.flash = 0.08;
-    addFloatingText(enemy.x, enemy.y - enemy.radius, Math.ceil(amount * closeBonus).toString(), crit ? "#ffd166" : "#e8fbff");
-    for (let i = 0; i < 2; i++) addParticle(enemy.x, enemy.y, enemy.color, rand(20, 90));
+    if (!isPerfStressed() || crit || amount > 20) addFloatingText(enemy.x, enemy.y - enemy.radius, Math.ceil(amount * closeBonus).toString(), crit ? "#ffd166" : "#e8fbff");
+    if (!isPerfStressed()) for (let i = 0; i < 2; i++) addParticle(enemy.x, enemy.y, enemy.color, rand(20, 90));
     playSound("hit");
   }
 
@@ -1402,7 +1622,10 @@
     state.kills++;
     state.score += enemy.score;
     if (state.player.siphonLevel > 0) state.player.shield = Math.min(state.player.maxShield, state.player.shield + 2.5 + state.player.siphonLevel * 2.5);
-    if (state.player.activeBatteryLevel > 0 && state.player.activeSkillId && Math.random() < 0.12 + state.player.activeBatteryLevel * 0.04) state.player.activeCooldown = Math.max(0, state.player.activeCooldown - (0.9 + state.player.activeBatteryLevel * 0.35));
+    if (state.player.activeBatteryLevel > 0 && state.player.activeSkillId && Math.random() < 0.12 + state.player.activeBatteryLevel * 0.04) {
+      state.player.activeCooldown = Math.max(0, state.player.activeCooldown - (0.9 + state.player.activeBatteryLevel * 0.35));
+      normalizeActiveSkillState(state.player);
+    }
     dropXp(enemy.x, enemy.y, enemy.xp, enemy.type === "boss" ? 12 : enemy.type === "elite" ? 5 : 1);
     createExplosion(enemy.x, enemy.y, enemy.radius * 2.4, enemy.type === "boss" ? 60 : 0, true);
     if (state.player.novaLevel > 0 && Math.random() < 0.18 + state.player.novaLevel * 0.08) {
@@ -1412,7 +1635,7 @@
       state.bossDefeated = true;
       state.overload = true;
       state.score += 3000;
-      showToast("虛空母艦已摧毀：超載波次啟動", 3.4, "success");
+      showToast(t("toast.bossDefeated"), 3.4, "success");
       addXp(160);
     }
     playSound("boom");
@@ -1420,9 +1643,14 @@
 
   function createExplosion(x, y, radius, damage = 0, visualOnly = false) {
     state.shake = Math.max(state.shake, settings.shake ? Math.min(5.2, radius / 18) : 0);
-    createRing(x, y, radius, "#ff3df2");
-    const particleCount = motion.reduced ? Math.min(12, radius / 4) : Math.min(42, radius / 2);
-    for (let i = 0; i < particleCount; i++) addParticle(x, y, i % 2 ? "#38f8ff" : "#ff3df2", rand(70, 260));
+    createRing(x, y, radius, artPalette.boss);
+    if (!isPerfStressed()) createRing(x, y, radius * 0.58, artPalette.friendlyPulse);
+    const particleBudget = getParticleLimit();
+    const pressureScale = getPerfLoad() > 0.9 ? 0.42 : getPerfLoad() > 0.72 ? 0.62 : 1;
+    const particleCount = Math.floor((motion.reduced ? Math.min(8, radius / 5) : Math.min(28, radius / 2.6)) * pressureScale);
+    if (state.particles.length < particleBudget) {
+      for (let i = 0; i < particleCount; i++) addParticle(x, y, i % 2 ? "#38f8ff" : "#ff3df2", rand(70, 230));
+    }
     if (!visualOnly && damage > 0) {
       state.enemies.forEach(enemy => {
         if (distance({ x, y }, enemy) < radius + enemy.radius) damageEnemy(enemy, damage, false);
@@ -1432,23 +1660,25 @@
   }
 
   function createRing(x, y, radius, color) {
-    const limit = Math.max(40, Math.floor(MAX_PARTICLES * getQualityPreset().particleScale));
+    const limit = getParticleLimit();
     if (state.particles.length >= limit) state.particles.shift();
-    state.particles.push({ x, y, vx: 0, vy: 0, radius: 8, maxRadius: radius, life: 0.42, maxLife: 0.42, color, type: "ring", grow: radius * 2.6 });
+    const life = isPerfStressed() ? 0.28 : 0.42;
+    state.particles.push({ x, y, vx: 0, vy: 0, radius: 8, maxRadius: radius, life, maxLife: life, color, type: "ring", grow: radius * (isPerfStressed() ? 3.2 : 2.6) });
   }
 
-  function addParticle(x, y, color, speed) {
-    const limit = Math.max(40, Math.floor(MAX_PARTICLES * getQualityPreset().particleScale));
-    if (state.particles.length >= limit) state.particles.shift();
+  function addParticle(x, y, color, speed, life = 0.72, radius = 0) {
+    const limit = getParticleLimit();
+    if (state.particles.length >= limit) return;
     const a = Math.random() * TAU;
+    const maxLife = isPerfStressed() ? Math.min(life, 0.42) : life;
     state.particles.push({
       x,
       y,
       vx: Math.cos(a) * speed,
       vy: Math.sin(a) * speed,
-      radius: rand(1.4, 4.2),
-      life: rand(0.28, 0.72),
-      maxLife: 0.72,
+      radius: radius || rand(1.2, isPerfStressed() ? 2.8 : 4.2),
+      life: rand(0.22, maxLife),
+      maxLife,
       color,
       type: "spark",
       grow: -1.4
@@ -1456,8 +1686,9 @@
   }
 
   function addFloatingText(x, y, text, color) {
+    if (isPerfStressed() && state.floatingTexts.length > 14 && Math.random() < 0.65) return;
     if (state.floatingTexts.length >= MAX_FLOATING_TEXTS) state.floatingTexts.shift();
-    state.floatingTexts.push({ x, y, text, color, life: 0.72, maxLife: 0.72, alpha: 1 });
+    state.floatingTexts.push({ x, y, text, color, life: 0.58, maxLife: 0.58, alpha: 1 });
   }
 
   function dropPickup(type, x, y, value = 1, count = 1) {
@@ -1492,18 +1723,18 @@
     }
     if (type === "shield") {
       p.shield = Math.min(p.maxShield, p.shield + 28 + pickup.value * 8);
-      addFloatingText(p.x, p.y - 26, "護盾", "#48f3ff");
+      addFloatingText(p.x, p.y - 26, t("pickup.shield"), "#48f3ff");
     }
     if (type === "bomb") {
       addFloatingText(p.x, p.y - 26, "爆裂核心", "#ffd36a");
       createExplosion(p.x, p.y, 120 + pickup.value * 12, 42 + pickup.value * 10);
     }
     if (type === "magnet") {
-      addFloatingText(p.x, p.y - 26, "磁力", "#d84cff");
+      addFloatingText(p.x, p.y - 26, t("pickup.magnet"), "#d84cff");
       addBuff("magnetRush", 10, { pickupBonus: 180 });
     }
     if (type === "overclock") {
-      addFloatingText(p.x, p.y - 26, "超頻", "#ffffff");
+      addFloatingText(p.x, p.y - 26, t("pickup.overclock"), "#ffffff");
       addBuff("overclock", 9, { damageBonus: 0.22, fireRateBonus: 0.18 });
     }
     if (p.pickupBurstLevel > 0) {
@@ -1529,6 +1760,21 @@
     return activeSkills.find(skill => skill.id === id);
   }
 
+  function normalizeActiveSkillState(p) {
+    if (!p || !p.activeSkillId) return;
+    if (p.activeCooldown <= 0) {
+      p.activeCooldown = 0;
+      if (p.activeCharges < 1) p.activeCharges = p.activeMaxCharges;
+    } else if (p.activeCharges > 0) {
+      p.activeCharges = 0;
+    }
+  }
+
+  function isActiveSkillReady(p) {
+    normalizeActiveSkillState(p);
+    return Boolean(p && p.activeSkillId && p.activeCharges > 0 && p.activeCooldown <= 0);
+  }
+
   function setActiveSkill(skill) {
     const p = state.player;
     p.activeSkillId = skill.id;
@@ -1545,16 +1791,17 @@
     p.activeSkillLevel = Math.min(4, p.activeSkillLevel + 1);
     const skill = getActiveSkill(p.activeSkillId);
     p.activeCooldownMax = skill.cooldown(p.activeSkillLevel);
-    p.activeCooldown = Math.min(p.activeCooldown, p.activeCooldownMax);
-    p.activeCharges = Math.max(p.activeCharges, 1);
+    p.activeCooldown = isActiveSkillReady(p) ? 0 : Math.min(p.activeCooldown, p.activeCooldownMax);
+    normalizeActiveSkillState(p);
   }
 
   function useActiveSkill() {
     const p = state.player;
     if (!p || state.mode !== "playing" || !p.activeSkillId) return;
-    if (p.activeCharges <= 0 || p.activeCooldown > 0) {
+    normalizeActiveSkillState(p);
+    if (!isActiveSkillReady(p)) {
       if (state.activeToastCooldown <= 0) {
-        showToast("主動技能尚未充能", 0.9, "warning");
+        showToast(t("skill.notCharged"), 0.9, "warning");
         state.activeToastCooldown = 0.8;
       }
       return;
@@ -1568,7 +1815,9 @@
     p.activeCharges = 0;
     p.activeCooldownMax = skill.cooldown(p.activeSkillLevel);
     p.activeCooldown = p.activeCooldownMax;
-    showToast(`${skill.name} 已釋放`, 1.2, "success");
+    normalizeActiveSkillState(p);
+    updateHud();
+    showToast(t("skill.released", { name: getActiveSkillName(skill) }), 1.2, "success");
     playSound("level");
   }
 
@@ -1583,7 +1832,8 @@
       const hit = distanceToSegment(enemy, p, end) < enemy.radius + width;
       if (hit) damageEnemy(enemy, damage, true);
     });
-    state.particles.push({ x: p.x, y: p.y, vx: Math.cos(a) * length, vy: Math.sin(a) * length, radius: width, life: 0.18, maxLife: 0.18, color: "#48f3ff", type: "beam" });
+    state.particles.push({ x: p.x, y: p.y, vx: Math.cos(a) * length, vy: Math.sin(a) * length, radius: width, life: 0.22, maxLife: 0.22, color: artPalette.friendlyPulse, type: "beam" });
+    createRing(p.x, p.y, 42 + p.activeSkillLevel * 8, artPalette.friendlyPulse);
     state.levelPulse = 1;
   }
 
@@ -1600,7 +1850,14 @@
         damageEnemy(enemy, damage * pull, false);
       }
     });
-    createRing(target.x, target.y, radius, "#d84cff");
+    createRing(target.x, target.y, radius, artPalette.void);
+    createRing(target.x, target.y, radius * 0.42, "#8d5cff");
+    if (!motion.reduced) {
+      for (let i = 0; i < 8; i++) {
+        const a = i * TAU / 8 + state.elapsed;
+        state.particles.push({ x: target.x + Math.cos(a) * radius * 0.35, y: target.y + Math.sin(a) * radius * 0.35, vx: -Math.cos(a) * 90, vy: -Math.sin(a) * 90, radius: 2.4, life: 0.5, maxLife: 0.5, color: artPalette.void, type: "spark", grow: -1.2 });
+      }
+    }
     state.levelPulse = 1;
   }
 
@@ -1608,9 +1865,11 @@
     const p = state.player;
     const a = angleTo(p, target);
     const range = 150 + p.activeSkillLevel * 24;
+    const from = { x: p.x, y: p.y };
     p.x = clamp(p.x + Math.cos(a) * range, 26, state.width - 26);
     p.y = clamp(p.y + Math.sin(a) * range, 26, state.height - 26);
     p.invuln = 0.45 + p.activeSkillLevel * 0.08;
+    createRing(from.x, from.y, 46 + p.activeSkillLevel * 12, artPalette.void);
     createExplosion(p.x, p.y, 86 + p.activeSkillLevel * 22, 34 + p.activeSkillLevel * 18);
     state.levelPulse = 1;
   }
@@ -1620,9 +1879,24 @@
     const strikes = 5 + p.activeSkillLevel * 2;
     const damage = (36 + p.activeSkillLevel * 16) * p.damageMult;
     const targets = [...state.enemies].sort((a, b) => distance(p, a) - distance(p, b)).slice(0, strikes);
+    createRing(p.x, p.y, 150 + p.activeSkillLevel * 24, artPalette.playerCore);
+    createRing(p.x, p.y, 88 + p.activeSkillLevel * 16, artPalette.friendlyPulse);
+    if (targets.length === 0) {
+      const bolts = motion.reduced ? 4 : Math.min(10, strikes + 2);
+      for (let i = 0; i < bolts; i++) {
+        const a = i * TAU / bolts + state.elapsed;
+        const x = p.x + Math.cos(a) * (76 + p.activeSkillLevel * 16);
+        const y = p.y + Math.sin(a) * (76 + p.activeSkillLevel * 16);
+        state.particles.push({ x, y: y - 120, vx: 0, vy: 170, radius: 3.5 + p.activeSkillLevel, life: 0.24, maxLife: 0.24, color: artPalette.playerCore, type: "beam" });
+        addParticle(x, y, artPalette.playerCore, 16, 0.45, 2.8);
+      }
+      state.levelPulse = 1;
+      return;
+    }
     targets.forEach(enemy => {
       damageEnemy(enemy, damage, Math.random() < 0.35);
-      createRing(enemy.x, enemy.y, 34 + p.activeSkillLevel * 6, "#ffd36a");
+      createRing(enemy.x, enemy.y, 34 + p.activeSkillLevel * 6, artPalette.playerCore);
+      state.particles.push({ x: enemy.x, y: enemy.y - 140, vx: 0, vy: 160, radius: 4 + p.activeSkillLevel, life: 0.22, maxLife: 0.22, color: artPalette.playerCore, type: "beam" });
     });
     state.levelPulse = 1;
   }
@@ -1665,19 +1939,14 @@
       const category = document.createElement("span");
       const name = document.createElement("strong");
       const description = document.createElement("p");
-      const current = getUpgradeLevel(skill);
-      const progress = createUpgradeProgress(current, skill.max);
+      const current = getSkillLevel(skill.id);
       button.className = "upgrade-card";
       button.type = "button";
       button.dataset.rarity = skill.rarity || "common";
-      category.className = "upgrade-category";
-      name.className = "upgrade-name";
-      description.className = "upgrade-description";
-      category.textContent = skill.category;
-      name.textContent = skill.name;
-      description.textContent = formatUpgradeDescription(skill.desc(current));
+      category.textContent = getSkillCategory(skill);
+      name.textContent = getSkillName(skill);
+      description.textContent = getSkillDescription(skill, current);
       button.append(category, name, description);
-      if (progress) button.append(progress);
       button.addEventListener("click", () => selectUpgrade(skill));
       ui.upgradeOptions.appendChild(button);
     });
@@ -1691,10 +1960,11 @@
       p.activeSkillChoicesSeen = true;
       return rollActiveSkillChoices(3).map(skill => ({
         id: `active-${skill.id}`,
-        name: skill.name,
-        category: skill.category,
+        nameKey: skill.nameKey,
+        categoryKey: skill.categoryKey,
         max: 1,
-        desc: () => `${skill.desc(1)} 一局只能同步一個主動技能。`,
+        descKey: skill.descKey,
+        desc: () => `${getActiveSkillDescription(skill, 1)} ${t("skill.onceActive")}`,
         apply: () => setActiveSkill(skill)
       }));
     }
@@ -1703,28 +1973,30 @@
       const active = getActiveSkill(p.activeSkillId);
       available.unshift({
         id: `active-upgrade-${active.id}`,
-        name: `${active.name} 升級`,
-        category: "主動強化",
+        sourceActiveId: active.id,
+        nameKey: active.nameKey,
+        categoryKey: "cat.activeUpgrade",
         max: 4,
-        desc: () => `${active.desc(p.activeSkillLevel)} 升級後降低冷卻並提高效果。`,
+        desc: () => `${getActiveSkillDescription(active, p.activeSkillLevel)} ${t("skill.activeUpgradeDesc")}`,
         apply: () => upgradeActiveSkill()
       });
     }
     const pool = [...available];
     const chosen = rollWeightedUpgrades(pool, 3);
     if (!chosen.length) {
-      chosen.push({ id: "heal", name: "緊急修復", category: "補給", max: 999, desc: () => "恢復 40 艦體並獲得 500 分。", apply: p => { p.hp = Math.min(p.maxHp, p.hp + 40); state.score += 500; } });
+      chosen.push({ id: "heal", nameKey: "skill.heal.name", categoryKey: "cat.supply", max: 999, desc: () => t("skill.heal.desc"), apply: p => { p.hp = Math.min(p.maxHp, p.hp + 40); state.score += 500; } });
     }
     return chosen;
   }
 
   function getUpgradeWeight(skill) {
     const p = state.player;
-    let weight = skill.weight ?? 1;
-    if (skill.tags?.includes("defense") && p.hp / p.maxHp < 0.45) weight *= 1.45;
-    if (skill.tags?.includes("attack") && p.level <= 4) weight *= 1.2;
-    if (skill.tags?.includes("pickup") && p.pickupRange > 180) weight *= 1.18;
-    if (skill.tags?.includes("active") && p.activeSkillId) weight *= 1.18;
+    let weight = typeof skill.weight === "number" ? skill.weight : 1;
+    const tags = skill.tags || [];
+    if (tags.includes("defense") && p.hp / p.maxHp < 0.45) weight *= 1.45;
+    if (tags.includes("attack") && p.level <= 4) weight *= 1.2;
+    if (tags.includes("pickup") && p.pickupRange > 180) weight *= 1.18;
+    if (tags.includes("active") && p.activeSkillId) weight *= 1.18;
     if (skill.rarity === "rare") weight *= 0.82;
     if (skill.rarity === "epic") weight *= 0.55;
     return weight;
@@ -1739,53 +2011,6 @@
       chosen.push(candidates.splice(index, 1)[0]);
     }
     return chosen;
-  }
-
-  function getUpgradeLevel(skill) {
-    if (skill.id?.startsWith("active-upgrade-")) return state.player.activeSkillLevel;
-    return getSkillLevel(skill.id);
-  }
-
-  function formatUpgradeDescription(text) {
-    const cleaned = text
-      .replace(/，?\s*目前等[級级]\s*\d+\s*\/\s*\d+。?/g, "。")
-      .replace(/。{2,}/g, "。")
-      .replace(/([。.!?])\s+/g, "$1")
-      .replace(/\s+/g, " ")
-      .trim();
-    if (!cleaned || /[。.!?]$/.test(cleaned)) return cleaned;
-    return `${cleaned}。`;
-  }
-
-  function createUpgradeProgress(current, max) {
-    const total = Number.isFinite(max) ? Math.floor(max) : 0;
-    if (total <= 0 || total > 8) return null;
-    const filled = clamp(Math.floor(current), 0, total);
-    const progress = document.createElement("div");
-    const header = document.createElement("div");
-    const label = document.createElement("span");
-    const value = document.createElement("strong");
-    const track = document.createElement("div");
-
-    progress.className = "upgrade-progress";
-    progress.setAttribute("aria-label", `目前等級 ${filled}/${total}`);
-    header.className = "upgrade-progress-header";
-    label.textContent = "等級";
-    value.textContent = `${filled}/${total}`;
-    track.className = "upgrade-progress-track";
-    track.style.setProperty("--segments", total);
-    track.setAttribute("aria-hidden", "true");
-
-    for (let index = 0; index < total; index++) {
-      const segment = document.createElement("span");
-      segment.className = "upgrade-progress-segment";
-      if (index < filled) segment.classList.add("is-filled");
-      track.appendChild(segment);
-    }
-
-    header.append(label, value);
-    progress.append(header, track);
-    return progress;
   }
 
   function getSkillLevel(id) {
@@ -1818,7 +2043,7 @@
 
   function selectUpgrade(skill) {
     skill.apply(state.player);
-    showToast(`${skill.name} 已同步`, 2.1, "success");
+    showToast(t("skill.synced", { name: getSkillName(skill) }), 2.1, "success");
     state.levelPulse = 1;
     setMode("playing");
     updateHud();
@@ -1830,16 +2055,16 @@
     if (p.invuln > 0) return;
     if (Math.random() < p.dodge) {
       addFloatingText(p.x, p.y - 28, "閃避", "#66ffb3");
-      p.invuln = Math.min(0.12, options.invulnerability ?? 0.16);
+      p.invuln = Math.min(0.12, typeof options.invulnerability === "number" ? options.invulnerability : 0.16);
       return;
     }
-    const finalAmount = Math.max(amount, options.minimumDamage ?? 0);
+    const finalAmount = Math.max(amount, typeof options.minimumDamage === "number" ? options.minimumDamage : 0);
     let remaining = finalAmount;
     const shieldHit = Math.min(p.shield, remaining);
     p.shield -= shieldHit;
     remaining -= shieldHit;
     if (remaining > 0) p.hp -= remaining;
-    p.invuln = options.invulnerability ?? (0.55 + p.invulnBonus);
+    p.invuln = typeof options.invulnerability === "number" ? options.invulnerability : 0.55 + p.invulnBonus;
     state.shake = settings.shake ? Math.max(state.shake, motion.reduced ? 0.8 : 2.2) : 0;
     state.hitPulse = 1;
     addFloatingText(p.x, p.y - 30, `-${Math.ceil(finalAmount)}`, remaining > 0 ? "#ff3b6b" : "#38f8ff");
@@ -1864,17 +2089,17 @@
     updateMenuState();
     setMode("gameOver");
     const p = state.player;
-    ui.resultTitle.textContent = state.bossDefeated ? "突破封鎖後失聯" : "艦體失效";
+    ui.resultTitle.textContent = state.bossDefeated ? t("result.titleBoss") : t("result.titleDefault");
     ui.resultStats.replaceChildren();
     [
-      ["本局時間", formatTime(state.elapsed)],
-      ["本局擊殺", state.kills],
-      ["本局等級", p.level],
-      ["本局分數", Math.floor(state.score)],
-      ["最高分", records.score],
-      ["最長時間", formatTime(records.time)],
-      ["最高擊殺", records.kills],
-      ["最高等級", records.level]
+      [t("result.time"), formatTime(state.elapsed)],
+      [t("result.kills"), state.kills],
+      [t("result.level"), p.level],
+      [t("result.score"), Math.floor(state.score)],
+      [t("result.bestScore"), records.score],
+      [t("result.bestTime"), formatTime(records.time)],
+      [t("result.bestKills"), records.kills],
+      [t("result.bestLevel"), records.level]
     ].forEach(([label, value]) => appendResultStat(label, value));
   }
 
@@ -1918,11 +2143,138 @@
     ctx.restore();
   }
 
+  function getPerfLoad() {
+    const enemyLoad = state.enemies.length / BALANCE.enemyMaxCap;
+    const projectileLoad = (state.projectiles.length + state.enemyProjectiles.length) / (BALANCE.maxPlayerProjectiles + BALANCE.maxEnemyProjectiles);
+    const particleLoad = state.particles.length / MAX_PARTICLES;
+    return clamp(Math.max(enemyLoad, projectileLoad, particleLoad), 0, 1.4);
+  }
+
+  function isPerfStressed() {
+    return motion.reduced || getPerfLoad() > 0.72;
+  }
+
+  function getParticleLimit() {
+    const base = Math.floor(MAX_PARTICLES * getQualityPreset().particleScale);
+    const pressureScale = getPerfLoad() > 0.9 ? 0.58 : getPerfLoad() > 0.72 ? 0.74 : 1;
+    return Math.max(28, Math.floor(base * pressureScale));
+  }
+
+  function getVisibleEnemyCount() {
+    return state.enemies.reduce((sum, enemy) => sum + (enemy.x > -80 && enemy.y > -80 && enemy.x < state.width + 80 && enemy.y < state.height + 80 ? 1 : 0), 0);
+  }
+
+  function setGlow(color, blur) {
+    ctx.shadowColor = color;
+    ctx.shadowBlur = blur * getQualityPreset().shadowBlur;
+  }
+
+  function drawDiamond(x, y, rx, ry = rx) {
+    ctx.beginPath();
+    ctx.moveTo(x, y - ry);
+    ctx.lineTo(x + rx, y);
+    ctx.lineTo(x, y + ry);
+    ctx.lineTo(x - rx, y);
+    ctx.closePath();
+  }
+
+  function drawRadialPolygon(sides, radius, innerScale = 1, phase = 0) {
+    ctx.beginPath();
+    for (let i = 0; i < sides; i++) {
+      const a = phase + i * TAU / sides;
+      const r = i % 2 ? radius * innerScale : radius;
+      const x = Math.cos(a) * r;
+      const y = Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+
   function invalidateBackgroundCache() {
     state.backgroundCache = null;
     state.backgroundMapId = null;
     state.backgroundWidth = 0;
     state.backgroundHeight = 0;
+  }
+
+  function drawBackgroundPattern(bg, map, quality) {
+    const cx = state.width * 0.5;
+    const cy = state.height * 0.5;
+    bg.save();
+    if (map.pattern === "nebula") {
+      for (let i = 0; i < 9; i++) {
+        const x = state.width * (0.12 + (i % 3) * 0.36) + rand(-40, 40);
+        const y = state.height * (0.18 + Math.floor(i / 3) * 0.28) + rand(-30, 30);
+        const r = Math.max(state.width, state.height) * rand(0.12, 0.22);
+        const g = bg.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, map.fog);
+        g.addColorStop(0.55, "rgba(72, 243, 255, 0.035)");
+        g.addColorStop(1, "transparent");
+        bg.fillStyle = g;
+        bg.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+    }
+    if (map.pattern === "asteroid") {
+      bg.fillStyle = map.debrisColor;
+      for (let i = 0; i < 34; i++) {
+        const x = rand(-80, state.width + 80);
+        const y = rand(-40, state.height + 40);
+        const size = rand(8, 28);
+        bg.save();
+        bg.translate(x, y);
+        bg.rotate(rand(-0.7, 0.7));
+        bg.beginPath();
+        bg.moveTo(size, 0);
+        bg.lineTo(size * 0.25, size * 0.8);
+        bg.lineTo(-size * 0.9, size * 0.25);
+        bg.lineTo(-size * 0.45, -size * 0.7);
+        bg.closePath();
+        bg.fill();
+        bg.restore();
+      }
+    }
+    if (map.pattern === "storm") {
+      bg.strokeStyle = map.glyphColor;
+      bg.lineWidth = 2;
+      for (let i = 0; i < 12; i++) {
+        const y = state.height * (i / 11) + rand(-30, 30);
+        bg.beginPath();
+        bg.moveTo(-60, y);
+        for (let x = 0; x < state.width + 120; x += 90) bg.lineTo(x, y + Math.sin(i + x * 0.02) * 28 + rand(-12, 12));
+        bg.stroke();
+      }
+    }
+    if (map.pattern === "ruins") {
+      bg.strokeStyle = map.glyphColor;
+      bg.lineWidth = 1;
+      for (let x = 32; x < state.width; x += 96) {
+        for (let y = 40; y < state.height; y += 86) {
+          if (Math.random() < 0.45) continue;
+          bg.strokeRect(x, y, 38, 22);
+          bg.beginPath();
+          bg.moveTo(x + 38, y + 11);
+          bg.lineTo(x + 70, y + 11);
+          bg.stroke();
+        }
+      }
+    }
+    if (quality.backgroundLines) {
+      bg.globalAlpha = 0.11;
+      bg.strokeStyle = map.accent;
+      bg.lineWidth = 1;
+      for (let x = -140; x < state.width + 140; x += 92) {
+        bg.beginPath();
+        bg.moveTo(x, 0);
+        bg.lineTo(x + 130, state.height);
+        bg.stroke();
+      }
+      bg.globalAlpha = 0.08;
+      bg.strokeStyle = map.secondaryAccent || map.accent;
+      bg.beginPath();
+      bg.arc(cx, cy, Math.min(state.width, state.height) * 0.38, 0, TAU);
+      bg.stroke();
+    }
+    bg.restore();
   }
 
   function drawBackground() {
@@ -1942,29 +2294,53 @@
       gradient.addColorStop(1, map.colors[2]);
       bg.fillStyle = gradient;
       bg.fillRect(0, 0, state.width, state.height);
-      if (quality.backgroundLines) {
-        bg.globalAlpha = 0.08;
-        bg.strokeStyle = map.accent;
-        bg.lineWidth = 1;
-        for (let x = -120; x < state.width + 120; x += 90) {
-          bg.beginPath();
-          bg.moveTo(x, 0);
-          bg.lineTo(x + 120, state.height);
-          bg.stroke();
-        }
-        bg.globalAlpha = 1;
-      }
+      drawBackgroundPattern(bg, map, quality);
     }
     ctx.drawImage(state.backgroundCache, 0, 0);
-    state.stars.forEach(star => {
-      star.y += star.speed * 0.0016;
+    if (!motion.reduced && settings.quality !== "performance" && !isPerfStressed()) {
+      ctx.save();
+      ctx.globalAlpha = 0.08;
+      ctx.strokeStyle = map.secondaryAccent || map.accent;
+      ctx.lineWidth = 1;
+      const drift = (state.elapsed * 18) % 160;
+      for (let x = -160 + drift; x < state.width + 160; x += 160) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x - 90, state.height);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    const visibleEnemies = getVisibleEnemyCount();
+    const stressed = isPerfStressed();
+    state.stars.forEach((star, index) => {
+      if ((stressed || visibleEnemies > 46) && index % 2 === 1) return;
+      star.y += star.speed * 0.0016 * star.layer;
+      star.x += star.drift * 0.0012;
       if (star.y > state.height) star.y = 0;
-      ctx.globalAlpha = star.alpha;
+      if (star.x < 0) star.x = state.width;
+      if (star.x > state.width) star.x = 0;
+      ctx.globalAlpha = star.alpha * (motion.reduced ? 1 : 0.72 + Math.sin(state.elapsed * 2.2 + star.twinkle) * 0.28);
       ctx.fillStyle = map.starTint;
       ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size, 0, TAU);
+      ctx.arc(star.x, star.y, star.size * star.layer, 0, TAU);
       ctx.fill();
     });
+    if (state.mapTransitionPulse > 0) {
+      const alpha = clamp(state.mapTransitionPulse, 0, 1);
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.2;
+      ctx.strokeStyle = map.accent;
+      ctx.lineWidth = 2;
+      const gap = 34 + (1 - alpha) * 50;
+      for (let x = -gap; x < state.width + gap; x += gap) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + state.height * 0.32, state.height);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
     ctx.globalAlpha = 1;
   }
 
@@ -2040,32 +2416,93 @@
   function drawPlayer() {
     const p = state.player;
     if (p.invuln > 0 && Math.floor(p.invuln * 18) % 2 === 0) ctx.globalAlpha = 0.55;
+    const speedRatio = clamp(Math.hypot(p.vx, p.vy) / p.speed, 0, 1.4);
+    const shieldRatio = clamp(p.shield / p.maxShield, 0, 1);
+    const hpRatio = clamp(p.hp / p.maxHp, 0, 1);
+    const flame = 18 + speedRatio * 24 + (motion.reduced ? 0 : Math.sin(state.elapsed * 18) * 4);
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.angle);
-    ctx.shadowColor = "#38f8ff";
-    ctx.shadowBlur = 18 * getQualityPreset().shadowBlur;
-    ctx.fillStyle = "#dffcff";
+    setGlow(artPalette.playerTrim, 18);
+    ctx.fillStyle = artPalette.playerHull;
+    ctx.strokeStyle = "rgba(72, 243, 255, 0.8)";
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(24, 0);
-    ctx.lineTo(-16, -13);
-    ctx.lineTo(-8, 0);
-    ctx.lineTo(-16, 13);
+    ctx.moveTo(28, 0);
+    ctx.lineTo(-10, -15);
+    ctx.lineTo(-20, -7);
+    ctx.lineTo(-10, 0);
+    ctx.lineTo(-20, 7);
+    ctx.lineTo(-10, 15);
     ctx.closePath();
     ctx.fill();
-    ctx.fillStyle = "#38f8ff";
+    ctx.stroke();
+    ctx.globalAlpha = 0.7;
+    ctx.fillStyle = "rgba(72, 243, 255, 0.42)";
     ctx.beginPath();
-    ctx.moveTo(-16, -8);
-    ctx.lineTo(-30 - Math.random() * 10, 0);
-    ctx.lineTo(-16, 8);
+    ctx.moveTo(-3, -12);
+    ctx.lineTo(-25, -25);
+    ctx.lineTo(-16, -5);
+    ctx.closePath();
     ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-3, 12);
+    ctx.lineTo(-25, 25);
+    ctx.lineTo(-16, 5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    const coreReady = p.activeSkillId && p.activeCharges > 0;
+    setGlow(coreReady ? artPalette.playerCore : artPalette.playerTrim, coreReady ? 24 : 12);
+    ctx.fillStyle = coreReady ? artPalette.playerCore : artPalette.playerTrim;
+    ctx.beginPath();
+    ctx.arc(3, 0, coreReady ? 4.6 : 3.4, 0, TAU);
+    ctx.fill();
+    ctx.shadowColor = artPalette.playerTrim;
+    ctx.shadowBlur = 20 * getQualityPreset().shadowBlur;
+    const flameGradient = ctx.createLinearGradient(-16, 0, -20 - flame, 0);
+    flameGradient.addColorStop(0, "rgba(72, 243, 255, 0.9)");
+    flameGradient.addColorStop(0.48, "rgba(255, 211, 106, 0.72)");
+    flameGradient.addColorStop(1, "rgba(216, 76, 255, 0)");
+    ctx.fillStyle = flameGradient;
+    ctx.beginPath();
+    ctx.moveTo(-16, -7);
+    ctx.lineTo(-20 - flame, 0);
+    ctx.lineTo(-16, 7);
+    ctx.closePath();
+    ctx.fill();
+    if (hpRatio < 0.35) {
+      ctx.strokeStyle = `rgba(255, 75, 102, ${0.35 + Math.sin(state.elapsed * 16) * 0.18})`;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(-5, -9);
+      ctx.lineTo(8, -2);
+      ctx.moveTo(-12, 6);
+      ctx.lineTo(9, 4);
+      ctx.stroke();
+    }
     ctx.restore();
     ctx.globalAlpha = 1;
+    if (shieldRatio > 0.02) {
+      ctx.save();
+      ctx.strokeStyle = `rgba(72, 243, 255, ${0.18 + shieldRatio * 0.32})`;
+      setGlow(artPalette.shield, 12);
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) {
+        const start = -Math.PI / 2 + i * TAU / 3;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius + 14, start, start + TAU / 3 * shieldRatio * 0.78);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
     if (p.droneLevel > 0) drawDrones();
-    ctx.strokeStyle = "rgba(56, 248, 255, 0.24)";
+    ctx.strokeStyle = "rgba(72, 243, 255, 0.18)";
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.pickupRange, 0, TAU);
     ctx.stroke();
+    ctx.shadowBlur = 0;
   }
 
   function drawDrones() {
@@ -2090,6 +2527,78 @@
     }
   }
 
+  function drawEnemyShape(enemy) {
+    const r = enemy.radius;
+    if (enemy.type === "hunter") {
+      drawRadialPolygon(8, r, 0.64, Math.PI / 8);
+    } else if (enemy.type === "tank") {
+      drawRadialPolygon(6, r, 0.92, Math.PI / 6);
+    } else if (enemy.type === "shooter") {
+      drawRadialPolygon(8, r, 0.78, Math.PI / 8);
+    } else if (enemy.type === "bomber") {
+      drawRadialPolygon(10, r, 0.54, state.elapsed * 1.8);
+    } else if (enemy.type === "wisp") {
+      drawRadialPolygon(12, r, 0.48, state.elapsed * 0.9);
+    } else if (enemy.type === "burrower") {
+      drawRadialPolygon(10, r, 0.6, state.elapsed * 1.2);
+    } else if (enemy.type === "stormer") {
+      drawDiamond(0, 0, r * 1.02, r * 1.02);
+    } else if (enemy.type === "sentinel") {
+      drawRadialPolygon(6, r, 0.74, state.elapsed * 0.6);
+    } else if (enemy.type === "boss") {
+      drawRadialPolygon(16, r, 0.76, state.elapsed * 0.08);
+    } else {
+      drawRadialPolygon(6, r, 0.72, Math.PI / 6);
+    }
+  }
+
+  function drawEnemyDetails(enemy) {
+    const r = enemy.radius;
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "rgba(255,255,255,0.38)";
+    ctx.lineWidth = 1;
+    if (enemy.type === "shooter") {
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.42, 0, TAU);
+      ctx.stroke();
+      for (let i = 0; i < 4; i++) {
+        const a = i * Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a) * r * 0.2, Math.sin(a) * r * 0.2);
+        ctx.lineTo(Math.cos(a) * r * 0.82, Math.sin(a) * r * 0.82);
+        ctx.stroke();
+      }
+    } else if (enemy.type === "stormer") {
+      ctx.strokeStyle = "rgba(255,255,255,0.55)";
+      for (let i = -1; i <= 1; i += 2) {
+        ctx.beginPath();
+        ctx.moveTo(-r * 0.38, i * r * 0.18);
+        ctx.lineTo(r * 0.22, i * -r * 0.32);
+        ctx.lineTo(r * 0.55, i * r * 0.18);
+        ctx.stroke();
+      }
+    } else if (enemy.type === "sentinel") {
+      ctx.fillStyle = "rgba(1, 7, 10, 0.72)";
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.34, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = enemy.color;
+      ctx.fillRect(-r * 0.4, -1.5, r * 0.8, 3);
+    } else if (enemy.type === "boss") {
+      ctx.strokeStyle = "rgba(255,255,255,0.32)";
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.58, 0, TAU);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      for (let i = 0; i < 6; i++) {
+        const a = i * TAU / 6;
+        ctx.beginPath();
+        ctx.arc(Math.cos(a) * r * 0.62, Math.sin(a) * r * 0.62, 3, 0, TAU);
+        ctx.fill();
+      }
+    }
+  }
+
   function drawEnemies() {
     const quality = getQualityPreset();
     state.enemies.forEach(enemy => {
@@ -2101,18 +2610,10 @@
       ctx.fillStyle = enemy.flash > 0 ? "#ffffff" : enemy.color;
       ctx.strokeStyle = "rgba(255,255,255,0.75)";
       ctx.lineWidth = enemy.type === "elite" || enemy.type === "boss" ? 3 : 1.4;
-      const sides = enemy.type === "tank" || enemy.type === "sentinel" ? 6 : enemy.type === "boss" ? 8 : enemy.type === "burrower" ? 5 : enemy.type === "stormer" ? 4 : 3;
-      ctx.beginPath();
-      for (let i = 0; i < sides; i++) {
-        const a = i * TAU / sides;
-        const r = enemy.radius * (i % 2 && enemy.type !== "tank" ? 0.72 : 1);
-        const x = Math.cos(a) * r;
-        const y = Math.sin(a) * r;
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.closePath();
+      drawEnemyShape(enemy);
       ctx.fill();
       ctx.stroke();
+      drawEnemyDetails(enemy);
       ctx.restore();
       if (enemy.type === "elite" || enemy.type === "boss") {
         ctx.strokeStyle = enemy.color;
@@ -2137,61 +2638,194 @@
 
   function drawProjectiles() {
     const quality = getQualityPreset();
+    const stressed = isPerfStressed();
     state.projectiles.forEach(p => {
+      const angle = Math.atan2(p.vy, p.vx);
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(angle);
       ctx.shadowColor = p.color;
-      ctx.shadowBlur = 18 * quality.shadowBlur;
+      ctx.shadowBlur = stressed ? 0 : 18 * quality.shadowBlur;
       ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, TAU);
-      ctx.fill();
+      if (p.type === "rail") {
+        ctx.fillRect(-p.radius * 2.8, -p.radius * 0.65, p.radius * 5.6, p.radius * 1.3);
+        ctx.globalAlpha = 0.35;
+        ctx.fillRect(-p.radius * 8, -0.7, p.radius * 7, 1.4);
+      } else if (p.type === "flak") {
+        drawDiamond(0, 0, p.radius * 1.3, p.radius * 0.85);
+        ctx.fill();
+      } else if (p.type === "missile") {
+        ctx.beginPath();
+        ctx.moveTo(p.radius * 1.7, 0);
+        ctx.lineTo(-p.radius, -p.radius * 0.8);
+        ctx.lineTo(-p.radius * 0.55, 0);
+        ctx.lineTo(-p.radius, p.radius * 0.8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 0.45;
+        ctx.fillStyle = artPalette.playerCore;
+        ctx.beginPath();
+        ctx.moveTo(-p.radius * 0.8, -p.radius * 0.45);
+        ctx.lineTo(-p.radius * 2.5, 0);
+        ctx.lineTo(-p.radius * 0.8, p.radius * 0.45);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.radius, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 0.35;
+        ctx.beginPath();
+        ctx.arc(0, 0, p.radius * 2.1, 0, TAU);
+        ctx.strokeStyle = p.color;
+        ctx.stroke();
+      }
+      ctx.restore();
     });
+    ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
   }
 
   function drawEnemyProjectiles() {
     const quality = getQualityPreset();
+    const stressed = isPerfStressed();
     state.enemyProjectiles.forEach(p => {
+      const angle = Math.atan2(p.vy, p.vx);
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(angle);
       ctx.shadowColor = p.color;
-      ctx.shadowBlur = 14 * quality.shadowBlur;
+      ctx.shadowBlur = stressed ? 0 : 18 * quality.shadowBlur;
+      ctx.fillStyle = p.warningColor || "rgba(255, 49, 95, 0.28)";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.radius * 2.1, p.radius * 1.25, 0, 0, TAU);
+      ctx.fill();
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, TAU);
+      ctx.moveTo(p.radius * 1.9, 0);
+      ctx.lineTo(-p.radius * 1.2, -p.radius * 1.15);
+      ctx.lineTo(-p.radius * 0.55, 0);
+      ctx.lineTo(-p.radius * 1.2, p.radius * 1.15);
+      ctx.closePath();
       ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = p.coreColor || "#fff0f4";
+      ctx.beginPath();
+      ctx.arc(p.radius * 0.28, 0, Math.max(1.6, p.radius * 0.38), 0, TAU);
+      ctx.fill();
+      ctx.restore();
     });
     ctx.shadowBlur = 0;
   }
 
-  function drawPickups() {
-    const quality = getQualityPreset();
-    state.pickups.forEach(p => {
-      ctx.shadowColor = p.color;
-      ctx.shadowBlur = 14 * quality.shadowBlur;
-      ctx.fillStyle = p.color;
+  function drawPickupSymbol(p, pulse) {
+    const pickupType = pickupTypes[p.type];
+    const r = pickupType ? pickupType.radius : 7;
+    if (p.type === "xp") {
+      drawDiamond(p.x, p.y, 6 + pulse * 0.4, 9 + pulse);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.72)";
+      ctx.lineWidth = 1.2;
+      drawDiamond(p.x, p.y, 8 + pulse * 0.5, 11 + pulse);
+      ctx.stroke();
+    } else if (p.type === "heal") {
+      ctx.fillRect(p.x - 2.2, p.y - r, 4.4, r * 2);
+      ctx.fillRect(p.x - r, p.y - 2.2, r * 2, 4.4);
+    } else if (p.type === "shield") {
       ctx.beginPath();
-      ctx.moveTo(p.x, p.y - 7);
-      ctx.lineTo(p.x + 6, p.y);
-      ctx.lineTo(p.x, p.y + 7);
-      ctx.lineTo(p.x - 6, p.y);
+      for (let i = 0; i < 6; i++) {
+        const a = -Math.PI / 2 + i * TAU / 6;
+        const x = p.x + Math.cos(a) * (r + 2 + pulse * 0.35);
+        const y = p.y + Math.sin(a) * (r + 2 + pulse * 0.35);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r * 0.35, 0, TAU);
+      ctx.fill();
+    } else if (p.type === "bomb") {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r + pulse * 0.3, 0, TAU);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255, 75, 102, 0.82)";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r + 5 + pulse, 0, TAU);
+      ctx.stroke();
+    } else if (p.type === "magnet") {
+      ctx.lineWidth = 2.4;
+      ctx.strokeStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x - 4, p.y, r, Math.PI * 0.5, Math.PI * 1.5);
+      ctx.arc(p.x + 4, p.y, r, Math.PI * 1.5, Math.PI * 0.5);
+      ctx.stroke();
+    } else if (p.type === "overclock") {
+      ctx.beginPath();
+      ctx.moveTo(p.x + 1, p.y - r - 3);
+      ctx.lineTo(p.x - 5, p.y + 1);
+      ctx.lineTo(p.x + 1, p.y + 1);
+      ctx.lineTo(p.x - 1, p.y + r + 4);
+      ctx.lineTo(p.x + 7, p.y - 2);
+      ctx.lineTo(p.x + 1, p.y - 2);
       ctx.closePath();
       ctx.fill();
+    } else {
+      drawDiamond(p.x, p.y, r, r);
+      ctx.fill();
+    }
+  }
+
+  function drawPickups() {
+    const quality = getQualityPreset();
+    const stressed = isPerfStressed();
+    state.pickups.forEach(p => {
+      const pulse = motion.reduced || stressed ? 0 : Math.sin(state.elapsed * 6 + p.x * 0.02) * 1.2;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = stressed ? 0 : 14 * quality.shadowBlur;
+      ctx.fillStyle = p.color;
+      drawPickupSymbol(p, pulse);
     });
     ctx.shadowBlur = 0;
   }
 
   function drawParticles() {
     const quality = getQualityPreset();
+    const stressed = isPerfStressed();
     state.particles.forEach(p => {
       const alpha = clamp(p.life / (p.maxLife || 0.72), 0, 1);
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = p.color;
       ctx.fillStyle = p.color;
       ctx.shadowColor = p.color;
-      ctx.shadowBlur = 16 * quality.shadowBlur;
+      ctx.shadowBlur = stressed ? 0 : 16 * quality.shadowBlur;
       if (p.type === "ring") {
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, TAU);
         ctx.stroke();
+      } else if (p.type === "beam") {
+        const a = Math.atan2(p.vy, p.vx);
+        const len = Math.hypot(p.vx, p.vy);
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(a);
+        ctx.globalAlpha = alpha * 0.34;
+        ctx.lineWidth = Math.max(2, p.radius * 1.4);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(len, 0);
+        ctx.stroke();
+        ctx.globalAlpha = alpha;
+        ctx.lineWidth = Math.max(1, p.radius * 0.32);
+        ctx.strokeStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(len, 0);
+        ctx.stroke();
+        ctx.restore();
       } else {
         ctx.beginPath();
         ctx.arc(p.x, p.y, Math.max(0.5, p.radius), 0, TAU);
@@ -2219,8 +2853,8 @@
     const alpha = clamp(state.levelPulse, 0, 1);
     ctx.save();
     ctx.globalAlpha = alpha * 0.55;
-    ctx.strokeStyle = "#66ffb3";
-    ctx.shadowColor = "#66ffb3";
+    ctx.strokeStyle = artPalette.xpCrystal;
+    ctx.shadowColor = artPalette.xpCrystal;
     ctx.shadowBlur = 24;
     ctx.lineWidth = 3;
     ctx.beginPath();
@@ -2233,9 +2867,19 @@
     if (motion.reduced || !state.enemies.some(enemy => enemy.type === "boss")) return;
     ctx.save();
     ctx.globalAlpha = 0.18 + Math.sin(state.elapsed * 7) * 0.06;
-    ctx.strokeStyle = "#ff3df2";
+    ctx.strokeStyle = artPalette.boss;
     ctx.lineWidth = 6;
     ctx.strokeRect(8, 8, state.width - 16, state.height - 16);
+    ctx.globalAlpha *= 0.8;
+    ctx.lineWidth = 1.5;
+    const notch = 42;
+    [[22, 22, 1, 1], [state.width - 22, 22, -1, 1], [22, state.height - 22, 1, -1], [state.width - 22, state.height - 22, -1, -1]].forEach(([x, y, sx, sy]) => {
+      ctx.beginPath();
+      ctx.moveTo(x, y + sy * notch);
+      ctx.lineTo(x, y);
+      ctx.lineTo(x + sx * notch, y);
+      ctx.stroke();
+    });
     ctx.restore();
   }
 
@@ -2268,7 +2912,7 @@
     ctx.fillStyle = "#f3fbff";
     ctx.font = "700 12px system-ui, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("虛空母艦", state.width / 2, y - 10);
+    ctx.fillText(t("enemy.boss"), state.width / 2, y - 10);
   }
 
   function loop(time) {
@@ -2355,6 +2999,11 @@
   ui.restartButton.addEventListener("click", startGame);
   ui.resultMenuButton.addEventListener("click", returnToMenu);
   ui.settingsBackButton.addEventListener("click", closeSettings);
+  ui.languageSelect.addEventListener("change", () => {
+    settings.language = ui.languageSelect.value;
+    saveSettings();
+    applyLanguage();
+  });
   ui.volumeControl.addEventListener("input", () => {
     settings.volume = Number(ui.volumeControl.value);
     saveSettings();
@@ -2383,6 +3032,7 @@
   });
 
   syncSettingsUi();
+  applyLanguage();
   applySettings();
   resize();
   createStars();
