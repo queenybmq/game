@@ -22,15 +22,7 @@
     levelValue: requiredElement("levelValue"),
     scoreValue: requiredElement("scoreValue"),
     mapValue: requiredElement("mapValue"),
-    hpText: requiredElement("hpText"),
-    hpFill: requiredElement("hpFill"),
-    shieldText: requiredElement("shieldText"),
-    shieldFill: requiredElement("shieldFill"),
-    xpText: requiredElement("xpText"),
     xpFill: requiredElement("xpFill"),
-    activeSkillName: requiredElement("activeSkillName"),
-    activeSkillText: requiredElement("activeSkillText"),
-    activeSkillFill: requiredElement("activeSkillFill"),
     menuOverlay: requiredElement("menuOverlay"),
     levelOverlay: requiredElement("levelOverlay"),
     pauseOverlay: requiredElement("pauseOverlay"),
@@ -80,41 +72,41 @@
   };
   const I18N = {
     en: {
-      "menu.eyebrow": "NEON VOID SURVIVAL", "menu.title": "Starship Survivor", "menu.lead": "Pilot the last starship, break through the neon swarm, upgrade your arsenal, and challenge the Void Carrier.",
+      "menu.eyebrow": "NEON VOID SURVIVAL", "menu.title": "Starship Survivor",
       "menu.controlMove": "Move by following the pointer", "menu.controlAim": "Auto aim, auto fire", "menu.controlSkill": "Left click triggers active skill", "menu.controlPause": "P / Esc to pause", "menu.controlSettings": "O opens settings", "menu.controlReturn": "Return to menu keeps the current run",
       "menu.start": "New Game", "menu.continue": "Continue", "menu.settings": "Game Settings", "records.bestScore": "Best Score", "records.bestTime": "Longest Survival", "records.bestKills": "Most Kills",
       "level.eyebrow": "SYSTEM UPGRADE", "level.title": "Choose One Upgrade", "pause.eyebrow": "PAUSED", "pause.title": "Battle Paused", "pause.hint": "Press P or Esc to return. Press O to open settings quickly.", "pause.resume": "Resume Battle",
-      "result.eyebrow": "MISSION REPORT", "result.restart": "Deploy Again", "settings.eyebrow": "GAME SETTINGS", "settings.title": "Game Settings", "settings.language": "Language", "settings.volume": "Sound Volume", "settings.quality": "Graphics Quality", "settings.qualityHigh": "High", "settings.qualityBalanced": "Balanced", "settings.qualityPerformance": "Performance", "settings.shake": "Screen Shake", "settings.motion": "Dynamic Scan Effects", "settings.autoPerf": "Auto Reduce Effects", "common.back": "Back", "common.backToMenu": "Back to Menu",
+      "result.eyebrow": "MISSION REPORT", "result.restart": "Deploy Again", "settings.eyebrow": "GAME SETTINGS", "settings.title": "Game Settings", "settings.tutorial": "Tutorial", "settings.language": "Language", "settings.volume": "Sound Volume", "settings.quality": "Graphics Quality", "settings.qualityHigh": "High", "settings.qualityBalanced": "Balanced", "settings.qualityPerformance": "Performance", "settings.shake": "Screen Shake", "settings.motion": "Dynamic Scan Effects", "settings.autoPerf": "Auto Reduce Effects", "common.back": "Back", "common.backToMenu": "Back to Menu",
       "hud.time": "Time", "hud.kills": "Kills", "hud.level": "Level", "hud.score": "Score", "hud.map": "Sector", "hud.hp": "Hull", "hud.shield": "Shield", "hud.xp": "Sync XP", "hud.activeNone": "Active skill offline", "hud.activeAcquire": "Upgrade to acquire", "hud.activeReady": "Left click ready",
       "result.titleBoss": "Lost after the Breakthrough", "result.titleDefault": "Hull Failure", "result.time": "Run Time", "result.kills": "Run Kills", "result.level": "Run Level", "result.score": "Run Score", "result.bestScore": "Best Score", "result.bestTime": "Best Time", "result.bestKills": "Best Kills", "result.bestLevel": "Best Level",
       "toast.saveSettingsFailed": "Settings could not be saved, but they are applied now.", "toast.saveRecordsFailed": "Records could not be saved, but this run can continue.", "toast.start": "Starship launched: break the blockade", "toast.continue": "Battle resumed: tactical systems restored"
     },
     "zh-CN": {
-      "menu.eyebrow": "霓虹虚空生存", "menu.title": "星舰幸存者", "menu.lead": "驾驶最后一艘星舰，在霓虹星海中突破蜂群、升级武装，挑战虚空母舰。",
+      "menu.eyebrow": "霓虹虚空生存", "menu.title": "星舰幸存者",
       "menu.controlMove": "鼠标指针牵引移动", "menu.controlAim": "自动瞄准，自动射击", "menu.controlSkill": "左键触发主动技能", "menu.controlPause": "P / Esc 暂停", "menu.controlSettings": "O 打开游戏设置", "menu.controlReturn": "返回主菜单可保留战局",
       "menu.start": "开始新游戏", "menu.continue": "继续游戏", "menu.settings": "游戏设置", "records.bestScore": "最高分", "records.bestTime": "最长生存", "records.bestKills": "最高击杀",
       "level.eyebrow": "系统升级", "level.title": "选择一项强化", "pause.eyebrow": "已暂停", "pause.title": "战场暂停", "pause.hint": "按 P 或 Esc 返回战斗，按 O 可快速打开设置。", "pause.resume": "恢复作战",
-      "result.eyebrow": "任务报告", "result.restart": "重新出击", "settings.eyebrow": "游戏设置", "settings.title": "游戏设置", "settings.language": "语言", "settings.volume": "音效音量", "settings.quality": "画质模式", "settings.qualityHigh": "高画质", "settings.qualityBalanced": "平衡", "settings.qualityPerformance": "性能优先", "settings.shake": "画面震动", "settings.motion": "动态扫描效果", "settings.autoPerf": "自动降低特效压力", "common.back": "返回", "common.backToMenu": "返回主菜单",
+      "result.eyebrow": "任务报告", "result.restart": "重新出击", "settings.eyebrow": "游戏设置", "settings.title": "游戏设置", "settings.tutorial": "游戏教程", "settings.language": "语言", "settings.volume": "音效音量", "settings.quality": "画质模式", "settings.qualityHigh": "高画质", "settings.qualityBalanced": "平衡", "settings.qualityPerformance": "性能优先", "settings.shake": "画面震动", "settings.motion": "动态扫描效果", "settings.autoPerf": "自动降低特效压力", "common.back": "返回", "common.backToMenu": "返回主菜单",
       "hud.time": "时间", "hud.kills": "击杀", "hud.level": "等级", "hud.score": "分数", "hud.map": "星域", "hud.hp": "舰体", "hud.shield": "护盾", "hud.xp": "同步经验", "hud.activeNone": "主动技能未同步", "hud.activeAcquire": "升级获取", "hud.activeReady": "左键就绪",
       "result.titleBoss": "突破封锁后失联", "result.titleDefault": "舰体失效", "result.time": "本局时间", "result.kills": "本局击杀", "result.level": "本局等级", "result.score": "本局分数", "result.bestScore": "最高分", "result.bestTime": "最长时间", "result.bestKills": "最高击杀", "result.bestLevel": "最高等级",
       "toast.saveSettingsFailed": "设置保存失败，本次仍会套用", "toast.saveRecordsFailed": "纪录保存失败，但本局可继续游玩", "toast.start": "星舰启动：突破封锁线", "toast.continue": "继续作战：战术系统恢复"
     },
     "zh-TW": {
-      "menu.eyebrow": "NEON VOID SURVIVAL", "menu.title": "星艦倖存者", "menu.lead": "駕駛最後一艘星艦，在霓虹星海中突破蜂群、升級武裝，挑戰虛空母艦。",
+      "menu.eyebrow": "NEON VOID SURVIVAL", "menu.title": "星艦倖存者",
       "menu.controlMove": "鼠標指針牽引移動", "menu.controlAim": "自動瞄準，自動射擊", "menu.controlSkill": "左鍵觸發主動技能", "menu.controlPause": "P / Esc 暫停", "menu.controlSettings": "O 開啟遊戲設置", "menu.controlReturn": "返回主選單可保留戰局",
       "menu.start": "開始新遊戲", "menu.continue": "繼續遊戲", "menu.settings": "遊戲設置", "records.bestScore": "最高分", "records.bestTime": "最長生存", "records.bestKills": "最高擊殺",
       "level.eyebrow": "SYSTEM UPGRADE", "level.title": "選擇一項強化", "pause.eyebrow": "PAUSED", "pause.title": "戰場暫停", "pause.hint": "按 P 或 Esc 返回戰鬥，按 O 可快速開啟設置。", "pause.resume": "恢復作戰",
-      "result.eyebrow": "MISSION REPORT", "result.restart": "重新出擊", "settings.eyebrow": "GAME SETTINGS", "settings.title": "遊戲設置", "settings.language": "語言", "settings.volume": "音效音量", "settings.quality": "畫質模式", "settings.qualityHigh": "高畫質", "settings.qualityBalanced": "平衡", "settings.qualityPerformance": "性能優先", "settings.shake": "畫面震動", "settings.motion": "動態掃描效果", "settings.autoPerf": "自動降低特效壓力", "common.back": "返回", "common.backToMenu": "返回主選單",
+      "result.eyebrow": "MISSION REPORT", "result.restart": "重新出擊", "settings.eyebrow": "GAME SETTINGS", "settings.title": "遊戲設置", "settings.tutorial": "遊戲教程", "settings.language": "語言", "settings.volume": "音效音量", "settings.quality": "畫質模式", "settings.qualityHigh": "高畫質", "settings.qualityBalanced": "平衡", "settings.qualityPerformance": "性能優先", "settings.shake": "畫面震動", "settings.motion": "動態掃描效果", "settings.autoPerf": "自動降低特效壓力", "common.back": "返回", "common.backToMenu": "返回主選單",
       "hud.time": "時間", "hud.kills": "擊殺", "hud.level": "等級", "hud.score": "分數", "hud.map": "星域", "hud.hp": "艦體", "hud.shield": "護盾", "hud.xp": "同步經驗", "hud.activeNone": "主動技能未同步", "hud.activeAcquire": "升級獲取", "hud.activeReady": "左鍵就緒",
       "result.titleBoss": "突破封鎖後失聯", "result.titleDefault": "艦體失效", "result.time": "本局時間", "result.kills": "本局擊殺", "result.level": "本局等級", "result.score": "本局分數", "result.bestScore": "最高分", "result.bestTime": "最長時間", "result.bestKills": "最高擊殺", "result.bestLevel": "最高等級",
       "toast.saveSettingsFailed": "設定儲存失敗，本次仍會套用", "toast.saveRecordsFailed": "紀錄儲存失敗，但本局可繼續遊玩", "toast.start": "星艦啟動：突破封鎖線", "toast.continue": "繼續作戰：戰術系統恢復"
     },
     ja: {
-      "menu.eyebrow": "ネオン虚空サバイバル", "menu.title": "スターシップ・サバイバー", "menu.lead": "最後のスターシップを操り、ネオンの星海で群れを突破し、武装を強化して虚空母艦に挑め。",
+      "menu.eyebrow": "ネオン虚空サバイバル", "menu.title": "スターシップ・サバイバー",
       "menu.controlMove": "ポインターに追従して移動", "menu.controlAim": "自動照準・自動射撃", "menu.controlSkill": "左クリックでアクティブスキル", "menu.controlPause": "P / Esc で一時停止", "menu.controlSettings": "O で設定を開く", "menu.controlReturn": "メニューに戻っても現在の出撃を保持",
       "menu.start": "新規ゲーム", "menu.continue": "続きから", "menu.settings": "ゲーム設定", "records.bestScore": "最高スコア", "records.bestTime": "最長生存", "records.bestKills": "最多撃破",
       "level.eyebrow": "システム強化", "level.title": "強化を1つ選択", "pause.eyebrow": "一時停止", "pause.title": "戦闘停止中", "pause.hint": "P または Esc で戦闘に戻る。O で設定をすぐ開けます。", "pause.resume": "戦闘再開",
-      "result.eyebrow": "ミッション報告", "result.restart": "再出撃", "settings.eyebrow": "ゲーム設定", "settings.title": "ゲーム設定", "settings.language": "言語", "settings.volume": "効果音音量", "settings.quality": "画質モード", "settings.qualityHigh": "高画質", "settings.qualityBalanced": "バランス", "settings.qualityPerformance": "パフォーマンス", "settings.shake": "画面揺れ", "settings.motion": "動的スキャン効果", "settings.autoPerf": "負荷時に演出を自動低減", "common.back": "戻る", "common.backToMenu": "メニューへ戻る",
+      "result.eyebrow": "ミッション報告", "result.restart": "再出撃", "settings.eyebrow": "ゲーム設定", "settings.title": "ゲーム設定", "settings.tutorial": "チュートリアル", "settings.language": "言語", "settings.volume": "効果音音量", "settings.quality": "画質モード", "settings.qualityHigh": "高画質", "settings.qualityBalanced": "バランス", "settings.qualityPerformance": "パフォーマンス", "settings.shake": "画面揺れ", "settings.motion": "動的スキャン効果", "settings.autoPerf": "負荷時に演出を自動低減", "common.back": "戻る", "common.backToMenu": "メニューへ戻る",
       "hud.time": "時間", "hud.kills": "撃破", "hud.level": "レベル", "hud.score": "スコア", "hud.map": "宙域", "hud.hp": "船体", "hud.shield": "シールド", "hud.xp": "同期経験", "hud.activeNone": "アクティブ未同期", "hud.activeAcquire": "強化で取得", "hud.activeReady": "左クリック準備完了",
       "result.titleBoss": "突破後に通信途絶", "result.titleDefault": "船体機能停止", "result.time": "出撃時間", "result.kills": "撃破数", "result.level": "到達レベル", "result.score": "スコア", "result.bestScore": "最高スコア", "result.bestTime": "最長時間", "result.bestKills": "最多撃破", "result.bestLevel": "最高レベル",
       "toast.saveSettingsFailed": "設定を保存できませんでしたが、今回は適用されます", "toast.saveRecordsFailed": "記録を保存できませんでしたが、この出撃は続行できます", "toast.start": "スターシップ起動：封鎖線を突破", "toast.continue": "戦闘再開：戦術システム復旧"
@@ -123,15 +115,15 @@
   const I18N_DYNAMIC = {
     en: {
       "cat.attack": "Attack", "cat.defense": "Defense", "cat.mobility": "Mobility", "cat.special": "Special", "cat.build": "Build", "cat.primary": "Primary Weapon", "cat.active": "Active Skill", "cat.activeUpgrade": "Active Upgrade", "cat.supply": "Supply",
-      "common.levelShort": "Lv.", "skill.onceActive": "Only one active skill can be synchronized per run.", "skill.activeUpgradeDesc": "Upgrading lowers cooldown and strengthens the effect.", "skill.synced": "{name} synchronized", "skill.released": "{name} released", "skill.notCharged": "Active skill not charged yet", "skill.heal.name": "Emergency Repair", "skill.heal.desc": "Restore 40 hull and gain 500 score.",
+      "common.levelShort": "Lv.", "common.maxed": "MAX", "skill.progressLabel": "Upgrade progress", "skill.onceActive": "Only one active skill can be synchronized per run.", "skill.activeUpgradeDesc": "Upgrading lowers cooldown and strengthens the effect.", "skill.synced": "{name} synchronized", "skill.released": "{name} released", "skill.notCharged": "Active skill not charged yet", "skill.heal.name": "Emergency Repair", "skill.heal.desc": "Restore 40 hull and gain 500 score.",
       "map.nebula": "Nebula Remnant", "map.asteroid": "Asteroid Ring", "map.storm": "Ion Storm", "map.ruins": "Machine Ruins", "map.enter": "Route entered: {name}",
       "enemy.hunter": "Hunter", "enemy.tank": "Armored Frigate", "enemy.shooter": "Scatter Drone", "enemy.bomber": "Bomber Swarm", "enemy.wisp": "Nebula Wisp", "enemy.burrower": "Rock Drill", "enemy.stormer": "Storm Conductor", "enemy.sentinel": "Ruin Sentinel", "enemy.elite": "Elite Ship", "enemy.boss": "Void Carrier",
       "wave.0": "Hunter swarm approaching", "wave.1": "Armored frigates entering battle", "wave.2": "Scatter drones suppressing fire", "wave.3": "Bomber swarm breached the line", "wave.4": "Void signal rising sharply", "wave.5": "Overload wave intensifying",
       "event.xpComet": "XP comet passing: crystal rain scattered", "event.eliteSignal": "Elite signal shifted: squad incoming", "event.supplyDrop": "Supply pod unlocked: tactical resources deployed", "event.crystalBloom": "Crystal bloom: multi-point XP recovery", "event.unstableCore": "Unstable core detected: detonation possible", "event.magnetPulse": "Magnetic pulse: recovery efficiency boosted", "event.overclockWindow": "Overclock window: weapon core heating", "event.voidTurbulence": "Void turbulence: enemy paths shifted",
       "toast.elite": "Elite ship entering battle", "toast.boss": "Warning: Void Carrier deployed", "toast.bossDefeated": "Void Carrier destroyed: overload waves activated",
       "pickup.heal": "Repair", "pickup.shield": "Shield", "pickup.bomb": "Blast Core", "pickup.magnet": "Magnet", "pickup.overclock": "Overclock", "floating.dodge": "Dodge", "buff.magnetRush": "Magnetic rush active", "buff.overclock": "Weapon overclock active", "buff.dangerReward": "High-risk yield active", "buff.default": "Temporary boost active",
-      "active.voidLance.name": "Void Lance", "active.voidLance.desc": "Left click fires a piercing lance for heavy path damage. Current level {level}/4.", "active.gravityWell.name": "Gravity Well", "active.gravityWell.desc": "Left click creates a pulling field at the pointer and deals sustained damage. Current level {level}/4.", "active.phaseBlink.name": "Phase Blink", "active.phaseBlink.desc": "Left click blinks toward the pointer and releases a shockwave. Current level {level}/4.", "active.ionStorm.name": "Ion Storm", "active.ionStorm.desc": "Left click calls multiple ion strikes against nearby enemies. Current level {level}/4.",
-      "skill.pulse.name": "Pulse Cannon Upgrade", "skill.pulse.desc": "Increases pulse cannon damage and fire rate. Current level {level}/6.", "skill.split.name": "Split Laser", "skill.split.desc": "Adds scatter barrage and piercing firepower. Current level {level}/5.", "skill.missile.name": "Plasma Missile", "skill.missile.desc": "Unlocks or upgrades tracking missiles. Current level {level}/5.", "skill.nova.name": "Starcore Burst", "skill.nova.desc": "Kills may detonate a starcore blast. Current level {level}/4.", "skill.crit.name": "Critical Calibration", "skill.crit.desc": "Raises critical chance and critical damage. Current level {level}/5.", "skill.shield.name": "Shield Expansion", "skill.shield.desc": "Increases max shield and regeneration. Current level {level}/5.", "skill.repair.name": "Nano Repair", "skill.repair.desc": "Continuously repairs hull. Current level {level}/4.", "skill.phase.name": "Phase Evasion", "skill.phase.desc": "Increases dodge and extends hit protection. Current level {level}/4.", "skill.engine.name": "Engine Overclock", "skill.engine.desc": "Increases movement speed and handling. Current level {level}/5.", "skill.magnet.name": "Magnetic Recovery", "skill.magnet.desc": "Expands XP crystal attraction range. Current level {level}/5.", "skill.drone.name": "Orbital Drone", "skill.drone.desc": "Adds orbital firepower and contact damage. Current level {level}/5.", "skill.emp.name": "EMP Pulse", "skill.emp.desc": "Periodically releases area damage. Current level {level}/5.", "skill.siphonShield.name": "Siphon Shield", "skill.siphonShield.desc": "Kills restore a small amount of shield. Current level {level}/4.", "skill.pickupBurst.name": "Pickup Burst", "skill.pickupBurst.desc": "Consecutive pickups trigger a small area burst. Current level {level}/4.", "skill.closeCombat.name": "Close-Range Eradication", "skill.closeCombat.desc": "Deals bonus damage to nearby enemies. Current level {level}/4.", "skill.lowHpOverdrive.name": "Critical Firepower", "skill.lowHpOverdrive.desc": "Low hull increases damage and fire rate. Current level {level}/3.", "skill.activeBattery.name": "Active Battery", "skill.activeBattery.desc": "Kills may shorten active skill cooldown. Current level {level}/4.", "skill.volatileRounds.name": "Volatile Rounds", "skill.volatileRounds.desc": "Bullet hits may create small explosions. Current level {level}/3.", "skill.railWeapon.name": "Rail Spike Cannon", "skill.railWeapon.desc": "Fires parallel high-speed piercing spikes. Current level {level}/4.", "skill.arcWeapon.name": "Chain Arc", "skill.arcWeapon.desc": "Releases parallel jumping arcs. Current level {level}/4.", "skill.flakWeapon.name": "Greenflame Flak", "skill.flakWeapon.desc": "Fires parallel close-range flak. Current level {level}/4."
+      "active.voidLance.name": "Void Lance", "active.voidLance.desc": "Left click fires a piercing lance for heavy path damage.", "active.gravityWell.name": "Gravity Well", "active.gravityWell.desc": "Left click creates a pulling field at the pointer and deals sustained damage.", "active.phaseBlink.name": "Phase Blink", "active.phaseBlink.desc": "Left click blinks toward the pointer and releases a shockwave.", "active.ionStorm.name": "Ion Storm", "active.ionStorm.desc": "Left click calls multiple ion strikes against nearby enemies.",
+      "skill.pulse.name": "Pulse Cannon Upgrade", "skill.pulse.desc": "Increases pulse cannon damage and fire rate.", "skill.split.name": "Split Laser", "skill.split.desc": "Adds scatter barrage and piercing firepower.", "skill.missile.name": "Plasma Missile", "skill.missile.desc": "Unlocks or upgrades tracking missiles.", "skill.nova.name": "Starcore Burst", "skill.nova.desc": "Kills may detonate a starcore blast.", "skill.crit.name": "Critical Calibration", "skill.crit.desc": "Raises critical chance and critical damage.", "skill.shield.name": "Shield Expansion", "skill.shield.desc": "Increases max shield and regeneration.", "skill.repair.name": "Nano Repair", "skill.repair.desc": "Continuously repairs hull.", "skill.phase.name": "Phase Evasion", "skill.phase.desc": "Increases dodge and extends hit protection.", "skill.engine.name": "Engine Overclock", "skill.engine.desc": "Increases movement speed and handling.", "skill.magnet.name": "Magnetic Recovery", "skill.magnet.desc": "Expands XP crystal attraction range.", "skill.drone.name": "Orbital Drone", "skill.drone.desc": "Adds orbital firepower and contact damage.", "skill.emp.name": "EMP Pulse", "skill.emp.desc": "Periodically releases area damage.", "skill.siphonShield.name": "Siphon Shield", "skill.siphonShield.desc": "Kills restore a small amount of shield.", "skill.pickupBurst.name": "Pickup Burst", "skill.pickupBurst.desc": "Consecutive pickups trigger a small area burst.", "skill.closeCombat.name": "Close-Range Eradication", "skill.closeCombat.desc": "Deals bonus damage to nearby enemies.", "skill.lowHpOverdrive.name": "Critical Firepower", "skill.lowHpOverdrive.desc": "Low hull increases damage and fire rate.", "skill.activeBattery.name": "Active Battery", "skill.activeBattery.desc": "Kills may shorten active skill cooldown.", "skill.volatileRounds.name": "Volatile Rounds", "skill.volatileRounds.desc": "Bullet hits may create small explosions.", "skill.railWeapon.name": "Rail Spike Cannon", "skill.railWeapon.desc": "Fires parallel high-speed piercing spikes.", "skill.arcWeapon.name": "Chain Arc", "skill.arcWeapon.desc": "Releases parallel jumping arcs.", "skill.flakWeapon.name": "Greenflame Flak", "skill.flakWeapon.desc": "Fires parallel close-range flak."
     },
     "zh-CN": {
       "cat.attack": "攻击", "cat.defense": "防御", "cat.mobility": "机动", "cat.special": "特殊", "cat.build": "Build", "cat.primary": "主武器", "cat.active": "主动技能", "cat.activeUpgrade": "主动强化", "cat.supply": "补给",
@@ -142,7 +134,7 @@
       "event.xpComet": "经验彗星掠过：晶体雨散落", "event.eliteSignal": "精英信号偏移：小队突入", "event.supplyDrop": "补给舱解锁：战术物资投放", "event.crystalBloom": "晶体绽放：多点经验回收", "event.unstableCore": "不稳定核心出现：可触发爆裂", "event.magnetPulse": "磁场脉冲：回收效率提升", "event.overclockWindow": "超频窗口：武装核心升温", "event.voidTurbulence": "虚空乱流：敌群路径偏移",
       "toast.elite": "精英舰进入战场", "toast.boss": "警告：虚空母舰登场", "toast.bossDefeated": "虚空母舰已摧毁：超载波次启动",
       "pickup.heal": "修复", "pickup.shield": "护盾", "pickup.bomb": "爆裂核心", "pickup.magnet": "磁力", "pickup.overclock": "超频", "floating.dodge": "闪避", "buff.magnetRush": "磁力奔流启动", "buff.overclock": "武装超频启动", "buff.dangerReward": "高危收益启动", "buff.default": "临时增益启动",
-      "active.voidLance.name": "虚空长矛", "active.voidLance.desc": "左键发射穿透长矛，对路径敌人造成高额伤害，目前等级 {level}/4。", "active.gravityWell.name": "重力井", "active.gravityWell.desc": "左键在鼠标位置生成牵引力场并持续伤害，目前等级 {level}/4。", "active.phaseBlink.name": "相位闪烁", "active.phaseBlink.desc": "左键向鼠标方向短距离闪烁并释放冲击波，目前等级 {level}/4。", "active.ionStorm.name": "离子风暴", "active.ionStorm.desc": "左键呼叫多道离子雷击打击附近敌人，目前等级 {level}/4。"
+      "active.voidLance.name": "虚空长矛", "active.voidLance.desc": "左键发射穿透长矛，对路径敌人造成高额伤害。", "active.gravityWell.name": "重力井", "active.gravityWell.desc": "左键在鼠标位置生成牵引力场并持续伤害。", "active.phaseBlink.name": "相位闪烁", "active.phaseBlink.desc": "左键向鼠标方向短距离闪烁并释放冲击波。", "active.ionStorm.name": "离子风暴", "active.ionStorm.desc": "左键呼叫多道离子雷击打击附近敌人。"
     },
     "zh-TW": {
       "cat.attack": "攻擊", "cat.defense": "防禦", "cat.mobility": "機動", "cat.special": "特殊", "cat.build": "Build", "cat.primary": "主武器", "cat.active": "主動技能", "cat.activeUpgrade": "主動強化", "cat.supply": "補給",
@@ -153,29 +145,29 @@
       "event.xpComet": "經驗彗星掠過：晶體雨散落", "event.eliteSignal": "菁英訊號偏移：小隊突入", "event.supplyDrop": "補給艙解鎖：戰術物資投放", "event.crystalBloom": "晶體綻放：多點經驗回收", "event.unstableCore": "不穩定核心出現：可觸發爆裂", "event.magnetPulse": "磁場脈衝：回收效率提升", "event.overclockWindow": "超頻窗口：武裝核心升溫", "event.voidTurbulence": "虛空亂流：敵群路徑偏移",
       "toast.elite": "菁英艦進入戰場", "toast.boss": "警告：虛空母艦登場", "toast.bossDefeated": "虛空母艦已摧毀：超載波次啟動",
       "pickup.heal": "修復", "pickup.shield": "護盾", "pickup.bomb": "爆裂核心", "pickup.magnet": "磁力", "pickup.overclock": "超頻", "floating.dodge": "閃避", "buff.magnetRush": "磁力奔流啟動", "buff.overclock": "武裝超頻啟動", "buff.dangerReward": "高危收益啟動", "buff.default": "臨時增益啟動",
-      "active.voidLance.name": "虛空長矛", "active.voidLance.desc": "左鍵發射穿透長矛，對路徑敵人造成高額傷害，目前等級 {level}/4。", "active.gravityWell.name": "重力井", "active.gravityWell.desc": "左鍵在鼠標位置生成牽引力場並持續傷害，目前等級 {level}/4。", "active.phaseBlink.name": "相位閃爍", "active.phaseBlink.desc": "左鍵向鼠標方向短距離閃爍並釋放衝擊波，目前等級 {level}/4。", "active.ionStorm.name": "離子風暴", "active.ionStorm.desc": "左鍵呼叫多道離子雷擊打擊附近敵人，目前等級 {level}/4。"
+      "active.voidLance.name": "虛空長矛", "active.voidLance.desc": "左鍵發射穿透長矛，對路徑敵人造成高額傷害。", "active.gravityWell.name": "重力井", "active.gravityWell.desc": "左鍵在鼠標位置生成牽引力場並持續傷害。", "active.phaseBlink.name": "相位閃爍", "active.phaseBlink.desc": "左鍵向鼠標方向短距離閃爍並釋放衝擊波。", "active.ionStorm.name": "離子風暴", "active.ionStorm.desc": "左鍵呼叫多道離子雷擊打擊附近敵人。"
     },
     ja: {
       "cat.attack": "攻撃", "cat.defense": "防御", "cat.mobility": "機動", "cat.special": "特殊", "cat.build": "ビルド", "cat.primary": "主武器", "cat.active": "アクティブ", "cat.activeUpgrade": "アクティブ強化", "cat.supply": "補給",
-      "common.levelShort": "Lv.", "skill.onceActive": "1回の出撃で同期できるアクティブスキルは1つだけです。", "skill.activeUpgradeDesc": "強化するとクールダウンが短縮され、効果が上昇します。", "skill.synced": "{name} を同期しました", "skill.released": "{name} を発動", "skill.notCharged": "アクティブスキルはまだチャージ中", "skill.heal.name": "緊急修理", "skill.heal.desc": "船体を40回復し、500スコアを獲得。",
+      "common.levelShort": "Lv.", "common.maxed": "MAX", "skill.progressLabel": "強化進行度", "skill.onceActive": "1回の出撃で同期できるアクティブスキルは1つだけです。", "skill.activeUpgradeDesc": "強化するとクールダウンが短縮され、効果が上昇します。", "skill.synced": "{name} を同期しました", "skill.released": "{name} を発動", "skill.notCharged": "アクティブスキルはまだチャージ中", "skill.heal.name": "緊急修理", "skill.heal.desc": "船体を40回復し、500スコアを獲得。",
       "map.nebula": "星雲残域", "map.asteroid": "砕岩リング", "map.storm": "イオン嵐", "map.ruins": "機械遺跡", "map.enter": "航路突入：{name}",
       "enemy.hunter": "ハンター", "enemy.tank": "装甲艦", "enemy.shooter": "散射機", "enemy.bomber": "自爆群", "enemy.wisp": "星雲ウィスプ", "enemy.burrower": "砕岩ドリル", "enemy.stormer": "雷暴導体", "enemy.sentinel": "遺跡センチネル", "enemy.elite": "エリート艦", "enemy.boss": "虚空母艦",
       "wave.0": "ハンター群接近", "wave.1": "装甲艦が戦場に参加", "wave.2": "散射機が制圧射撃開始", "wave.3": "自爆群が防衛線を突破", "wave.4": "虚空信号が急上昇", "wave.5": "オーバーロード波が強化中",
       "event.xpComet": "経験彗星通過：結晶雨が散布", "event.eliteSignal": "エリート信号偏移：小隊突入", "event.supplyDrop": "補給ポッド解放：戦術物資投下", "event.crystalBloom": "結晶開花：多点経験回収", "event.unstableCore": "不安定コア出現：爆裂可能", "event.magnetPulse": "磁場パルス：回収効率上昇", "event.overclockWindow": "オーバークロック窓：武装コア加熱", "event.voidTurbulence": "虚空乱流：敵群経路変化",
       "toast.elite": "エリート艦が戦場に進入", "toast.boss": "警告：虚空母艦出現", "toast.bossDefeated": "虚空母艦撃破：オーバーロード波起動",
       "pickup.heal": "修理", "pickup.shield": "シールド", "pickup.bomb": "爆裂コア", "pickup.magnet": "磁力", "pickup.overclock": "オーバークロック", "floating.dodge": "回避", "buff.magnetRush": "磁力奔流起動", "buff.overclock": "武装オーバークロック起動", "buff.dangerReward": "高危険報酬起動", "buff.default": "一時強化起動",
-      "active.voidLance.name": "虚空ランス", "active.voidLance.desc": "左クリックで貫通ランスを放ち、経路上の敵に大ダメージ。現在レベル {level}/4。", "active.gravityWell.name": "重力井戸", "active.gravityWell.desc": "左クリックでポインター位置に牽引フィールドを生成し継続ダメージ。現在レベル {level}/4。", "active.phaseBlink.name": "位相ブリンク", "active.phaseBlink.desc": "左クリックでポインター方向へ短距離ブリンクし衝撃波を放つ。現在レベル {level}/4。", "active.ionStorm.name": "イオン嵐", "active.ionStorm.desc": "左クリックで複数のイオン雷撃を呼び、周囲の敵を攻撃。現在レベル {level}/4。"
+      "active.voidLance.name": "虚空ランス", "active.voidLance.desc": "左クリックで貫通ランスを放ち、経路上の敵に大ダメージ。", "active.gravityWell.name": "重力井戸", "active.gravityWell.desc": "左クリックでポインター位置に牽引フィールドを生成し継続ダメージ。", "active.phaseBlink.name": "位相ブリンク", "active.phaseBlink.desc": "左クリックでポインター方向へ短距離ブリンクし衝撃波を放つ。", "active.ionStorm.name": "イオン嵐", "active.ionStorm.desc": "左クリックで複数のイオン雷撃を呼び、周囲の敵を攻撃。"
     }
   };
   Object.keys(I18N_DYNAMIC).forEach(language => Object.assign(I18N[language], I18N_DYNAMIC[language]));
   Object.assign(I18N["zh-TW"], {
-    "skill.pulse.name": "脈衝炮強化", "skill.pulse.desc": "脈衝炮傷害與射速提升，目前等級 {level}/6。", "skill.split.name": "分裂雷射", "skill.split.desc": "增加散射彈幕與穿透火力，目前等級 {level}/5。", "skill.missile.name": "等離子飛彈", "skill.missile.desc": "啟用或強化追蹤飛彈，目前等級 {level}/5。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "擊殺時機率引爆星核，目前等級 {level}/4。", "skill.crit.name": "暴擊校準", "skill.crit.desc": "提高暴擊率與暴擊傷害，目前等級 {level}/5。", "skill.shield.name": "護盾擴容", "skill.shield.desc": "提升最大護盾與回復速度，目前等級 {level}/5。", "skill.repair.name": "奈米修復", "skill.repair.desc": "持續修復艦體，目前等級 {level}/4。", "skill.phase.name": "相位閃避", "skill.phase.desc": "提高閃避率並延長受擊保護，目前等級 {level}/4。", "skill.engine.name": "引擎超頻", "skill.engine.desc": "提高移動速度與操控感，目前等級 {level}/5。", "skill.magnet.name": "磁力回收", "skill.magnet.desc": "擴大經驗晶體吸附範圍，目前等級 {level}/5。", "skill.drone.name": "環繞無人機", "skill.drone.desc": "增加環繞火力與接觸傷害，目前等級 {level}/5。", "skill.emp.name": "電磁脈衝", "skill.emp.desc": "週期性釋放範圍傷害，目前等級 {level}/5。", "skill.siphonShield.name": "虹吸護盾", "skill.siphonShield.desc": "擊殺回復少量護盾，目前等級 {level}/4。", "skill.pickupBurst.name": "拾取爆裂", "skill.pickupBurst.desc": "連續拾取後觸發小範圍爆裂，目前等級 {level}/4。", "skill.closeCombat.name": "近距離殲滅", "skill.closeCombat.desc": "對近距離敵人造成額外傷害，目前等級 {level}/4。", "skill.lowHpOverdrive.name": "臨界火力", "skill.lowHpOverdrive.desc": "低血量時提高傷害與射速，目前等級 {level}/3。", "skill.activeBattery.name": "主動電池", "skill.activeBattery.desc": "擊殺有機率縮短主動技能冷卻，目前等級 {level}/4。", "skill.volatileRounds.name": "不穩定彈藥", "skill.volatileRounds.desc": "子彈命中有機率造成小爆裂，目前等級 {level}/3。", "skill.railWeapon.name": "軌道長釘炮", "skill.railWeapon.desc": "並行發射高速穿透長釘，目前等級 {level}/4。", "skill.arcWeapon.name": "鏈式電弧", "skill.arcWeapon.desc": "並行釋放跳躍電弧，目前等級 {level}/4。", "skill.flakWeapon.name": "綠焰霰彈", "skill.flakWeapon.desc": "並行發射近距離霰彈，目前等級 {level}/4。"
+    "skill.pulse.name": "脈衝炮強化", "skill.pulse.desc": "脈衝炮傷害與射速提升。", "skill.split.name": "分裂雷射", "skill.split.desc": "增加散射彈幕與穿透火力。", "skill.missile.name": "等離子飛彈", "skill.missile.desc": "啟用或強化追蹤飛彈。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "擊殺時機率引爆星核。", "skill.crit.name": "暴擊校準", "skill.crit.desc": "提高暴擊率與暴擊傷害。", "skill.shield.name": "護盾擴容", "skill.shield.desc": "提升最大護盾與回復速度。", "skill.repair.name": "奈米修復", "skill.repair.desc": "持續修復艦體。", "skill.phase.name": "相位閃避", "skill.phase.desc": "提高閃避率並延長受擊保護。", "skill.engine.name": "引擎超頻", "skill.engine.desc": "提高移動速度與操控感。", "skill.magnet.name": "磁力回收", "skill.magnet.desc": "擴大經驗晶體吸附範圍。", "skill.drone.name": "環繞無人機", "skill.drone.desc": "增加環繞火力與接觸傷害。", "skill.emp.name": "電磁脈衝", "skill.emp.desc": "週期性釋放範圍傷害。", "skill.siphonShield.name": "虹吸護盾", "skill.siphonShield.desc": "擊殺回復少量護盾。", "skill.pickupBurst.name": "拾取爆裂", "skill.pickupBurst.desc": "連續拾取後觸發小範圍爆裂。", "skill.closeCombat.name": "近距離殲滅", "skill.closeCombat.desc": "對近距離敵人造成額外傷害。", "skill.lowHpOverdrive.name": "臨界火力", "skill.lowHpOverdrive.desc": "低血量時提高傷害與射速。", "skill.activeBattery.name": "主動電池", "skill.activeBattery.desc": "擊殺有機率縮短主動技能冷卻。", "skill.volatileRounds.name": "不穩定彈藥", "skill.volatileRounds.desc": "子彈命中有機率造成小爆裂。", "skill.railWeapon.name": "軌道長釘炮", "skill.railWeapon.desc": "並行發射高速穿透長釘。", "skill.arcWeapon.name": "鏈式電弧", "skill.arcWeapon.desc": "並行釋放跳躍電弧。", "skill.flakWeapon.name": "綠焰霰彈", "skill.flakWeapon.desc": "並行發射近距離霰彈。"
   });
   Object.assign(I18N["zh-CN"], {
-    "skill.pulse.name": "脉冲炮强化", "skill.pulse.desc": "脉冲炮伤害与射速提升，目前等级 {level}/6。", "skill.split.name": "分裂激光", "skill.split.desc": "增加散射弹幕与穿透火力，目前等级 {level}/5。", "skill.missile.name": "等离子飞弹", "skill.missile.desc": "启用或强化追踪飞弹，目前等级 {level}/5。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "击杀时概率引爆星核，目前等级 {level}/4。", "skill.crit.name": "暴击校准", "skill.crit.desc": "提高暴击率与暴击伤害，目前等级 {level}/5。", "skill.shield.name": "护盾扩容", "skill.shield.desc": "提升最大护盾与回复速度，目前等级 {level}/5。", "skill.repair.name": "纳米修复", "skill.repair.desc": "持续修复舰体，目前等级 {level}/4。", "skill.phase.name": "相位闪避", "skill.phase.desc": "提高闪避率并延长受击保护，目前等级 {level}/4。", "skill.engine.name": "引擎超频", "skill.engine.desc": "提高移动速度与操控感，目前等级 {level}/5。", "skill.magnet.name": "磁力回收", "skill.magnet.desc": "扩大经验晶体吸附范围，目前等级 {level}/5。", "skill.drone.name": "环绕无人机", "skill.drone.desc": "增加环绕火力与接触伤害，目前等级 {level}/5。", "skill.emp.name": "电磁脉冲", "skill.emp.desc": "周期性释放范围伤害，目前等级 {level}/5。", "skill.siphonShield.name": "虹吸护盾", "skill.siphonShield.desc": "击杀回复少量护盾，目前等级 {level}/4。", "skill.pickupBurst.name": "拾取爆裂", "skill.pickupBurst.desc": "连续拾取后触发小范围爆裂，目前等级 {level}/4。", "skill.closeCombat.name": "近距离歼灭", "skill.closeCombat.desc": "对近距离敌人造成额外伤害，目前等级 {level}/4。", "skill.lowHpOverdrive.name": "临界火力", "skill.lowHpOverdrive.desc": "低血量时提高伤害与射速，目前等级 {level}/3。", "skill.activeBattery.name": "主动电池", "skill.activeBattery.desc": "击杀有概率缩短主动技能冷却，目前等级 {level}/4。", "skill.volatileRounds.name": "不稳定弹药", "skill.volatileRounds.desc": "子弹命中有概率造成小爆裂，目前等级 {level}/3。", "skill.railWeapon.name": "轨道长钉炮", "skill.railWeapon.desc": "并行发射高速穿透长钉，目前等级 {level}/4。", "skill.arcWeapon.name": "链式电弧", "skill.arcWeapon.desc": "并行释放跳跃电弧，目前等级 {level}/4。", "skill.flakWeapon.name": "绿焰霰弹", "skill.flakWeapon.desc": "并行发射近距离霰弹，目前等级 {level}/4。"
+    "skill.pulse.name": "脉冲炮强化", "skill.pulse.desc": "脉冲炮伤害与射速提升。", "skill.split.name": "分裂激光", "skill.split.desc": "增加散射弹幕与穿透火力。", "skill.missile.name": "等离子飞弹", "skill.missile.desc": "启用或强化追踪飞弹。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "击杀时概率引爆星核。", "skill.crit.name": "暴击校准", "skill.crit.desc": "提高暴击率与暴击伤害。", "skill.shield.name": "护盾扩容", "skill.shield.desc": "提升最大护盾与回复速度。", "skill.repair.name": "纳米修复", "skill.repair.desc": "持续修复舰体。", "skill.phase.name": "相位闪避", "skill.phase.desc": "提高闪避率并延长受击保护。", "skill.engine.name": "引擎超频", "skill.engine.desc": "提高移动速度与操控感。", "skill.magnet.name": "磁力回收", "skill.magnet.desc": "扩大经验晶体吸附范围。", "skill.drone.name": "环绕无人机", "skill.drone.desc": "增加环绕火力与接触伤害。", "skill.emp.name": "电磁脉冲", "skill.emp.desc": "周期性释放范围伤害。", "skill.siphonShield.name": "虹吸护盾", "skill.siphonShield.desc": "击杀回复少量护盾。", "skill.pickupBurst.name": "拾取爆裂", "skill.pickupBurst.desc": "连续拾取后触发小范围爆裂。", "skill.closeCombat.name": "近距离歼灭", "skill.closeCombat.desc": "对近距离敌人造成额外伤害。", "skill.lowHpOverdrive.name": "临界火力", "skill.lowHpOverdrive.desc": "低血量时提高伤害与射速。", "skill.activeBattery.name": "主动电池", "skill.activeBattery.desc": "击杀有概率缩短主动技能冷却。", "skill.volatileRounds.name": "不稳定弹药", "skill.volatileRounds.desc": "子弹命中有概率造成小爆裂。", "skill.railWeapon.name": "轨道长钉炮", "skill.railWeapon.desc": "并行发射高速穿透长钉。", "skill.arcWeapon.name": "链式电弧", "skill.arcWeapon.desc": "并行释放跳跃电弧。", "skill.flakWeapon.name": "绿焰霰弹", "skill.flakWeapon.desc": "并行发射近距离霰弹。"
   });
   Object.assign(I18N.ja, {
-    "skill.pulse.name": "パルス砲強化", "skill.pulse.desc": "パルス砲のダメージと連射速度を上昇。現在レベル {level}/6。", "skill.split.name": "分裂レーザー", "skill.split.desc": "散射弾幕と貫通火力を追加。現在レベル {level}/5。", "skill.missile.name": "プラズマミサイル", "skill.missile.desc": "追尾ミサイルを解放または強化。現在レベル {level}/5。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "撃破時に星核爆発が発生することがある。現在レベル {level}/4。", "skill.crit.name": "クリティカル調整", "skill.crit.desc": "クリティカル率とダメージを上昇。現在レベル {level}/5。", "skill.shield.name": "シールド拡張", "skill.shield.desc": "最大シールドと回復速度を上昇。現在レベル {level}/5。", "skill.repair.name": "ナノ修復", "skill.repair.desc": "船体を継続修復。現在レベル {level}/4。", "skill.phase.name": "位相回避", "skill.phase.desc": "回避率を上げ、被弾保護を延長。現在レベル {level}/4。", "skill.engine.name": "エンジン過負荷", "skill.engine.desc": "移動速度と操作性を上昇。現在レベル {level}/5。", "skill.magnet.name": "磁力回収", "skill.magnet.desc": "経験結晶の吸引範囲を拡大。現在レベル {level}/5。", "skill.drone.name": "周回ドローン", "skill.drone.desc": "周回火力と接触ダメージを追加。現在レベル {level}/5。", "skill.emp.name": "電磁パルス", "skill.emp.desc": "周期的に範囲ダメージを放つ。現在レベル {level}/5。", "skill.siphonShield.name": "サイフォンシールド", "skill.siphonShield.desc": "撃破時に少量のシールドを回復。現在レベル {level}/4。", "skill.pickupBurst.name": "回収バースト", "skill.pickupBurst.desc": "連続回収で小範囲爆発を発動。現在レベル {level}/4。", "skill.closeCombat.name": "近距離殲滅", "skill.closeCombat.desc": "近距離の敵に追加ダメージ。現在レベル {level}/4。", "skill.lowHpOverdrive.name": "臨界火力", "skill.lowHpOverdrive.desc": "船体低下時にダメージと連射速度上昇。現在レベル {level}/3。", "skill.activeBattery.name": "アクティブ電池", "skill.activeBattery.desc": "撃破時にアクティブスキルの冷却を短縮することがある。現在レベル {level}/4。", "skill.volatileRounds.name": "不安定弾薬", "skill.volatileRounds.desc": "弾丸命中時に小爆発が発生することがある。現在レベル {level}/3。", "skill.railWeapon.name": "レールスパイク砲", "skill.railWeapon.desc": "高速貫通スパイクを並行発射。現在レベル {level}/4。", "skill.arcWeapon.name": "連鎖電弧", "skill.arcWeapon.desc": "跳躍する電弧を並行放出。現在レベル {level}/4。", "skill.flakWeapon.name": "緑炎散弾", "skill.flakWeapon.desc": "近距離散弾を並行発射。現在レベル {level}/4。"
+    "skill.pulse.name": "パルス砲強化", "skill.pulse.desc": "パルス砲のダメージと連射速度を上昇。", "skill.split.name": "分裂レーザー", "skill.split.desc": "散射弾幕と貫通火力を追加。", "skill.missile.name": "プラズマミサイル", "skill.missile.desc": "追尾ミサイルを解放または強化。", "skill.nova.name": "星核爆裂", "skill.nova.desc": "撃破時に星核爆発が発生することがある。", "skill.crit.name": "クリティカル調整", "skill.crit.desc": "クリティカル率とダメージを上昇。", "skill.shield.name": "シールド拡張", "skill.shield.desc": "最大シールドと回復速度を上昇。", "skill.repair.name": "ナノ修復", "skill.repair.desc": "船体を継続修復。", "skill.phase.name": "位相回避", "skill.phase.desc": "回避率を上げ、被弾保護を延長。", "skill.engine.name": "エンジン過負荷", "skill.engine.desc": "移動速度と操作性を上昇。", "skill.magnet.name": "磁力回収", "skill.magnet.desc": "経験結晶の吸引範囲を拡大。", "skill.drone.name": "周回ドローン", "skill.drone.desc": "周回火力と接触ダメージを追加。", "skill.emp.name": "電磁パルス", "skill.emp.desc": "周期的に範囲ダメージを放つ。", "skill.siphonShield.name": "サイフォンシールド", "skill.siphonShield.desc": "撃破時に少量のシールドを回復。", "skill.pickupBurst.name": "回収バースト", "skill.pickupBurst.desc": "連続回収で小範囲爆発を発動。", "skill.closeCombat.name": "近距離殲滅", "skill.closeCombat.desc": "近距離の敵に追加ダメージ。", "skill.lowHpOverdrive.name": "臨界火力", "skill.lowHpOverdrive.desc": "船体低下時にダメージと連射速度上昇。", "skill.activeBattery.name": "アクティブ電池", "skill.activeBattery.desc": "撃破時にアクティブスキルの冷却を短縮することがある。", "skill.volatileRounds.name": "不安定弾薬", "skill.volatileRounds.desc": "弾丸命中時に小爆発が発生することがある。", "skill.railWeapon.name": "レールスパイク砲", "skill.railWeapon.desc": "高速貫通スパイクを並行発射。", "skill.arcWeapon.name": "連鎖電弧", "skill.arcWeapon.desc": "跳躍する電弧を並行放出。", "skill.flakWeapon.name": "緑炎散弾", "skill.flakWeapon.desc": "近距離散弾を並行発射。"
   });
   const DEFAULT_SETTINGS = {
     volume: 55,
@@ -604,9 +596,6 @@
     document.querySelector(".stat-line span:nth-child(3)").firstChild.textContent = `${t("hud.level")} `;
     document.querySelector(".stat-line span:nth-child(4)").firstChild.textContent = `${t("hud.score")} `;
     document.querySelector(".stat-line span:nth-child(5)").firstChild.textContent = `${t("hud.map")} `;
-    document.querySelector(".meter-group:nth-child(1) .meter-label span").textContent = t("hud.hp");
-    document.querySelector(".meter-group:nth-child(2) .meter-label span").textContent = t("hud.shield");
-    document.querySelector(".xp-meter-group .meter-label span").textContent = t("hud.xp");
   }
 
   function syncSettingsUi() {
@@ -906,44 +895,32 @@
     ui.levelValue.textContent = p.level.toString();
     ui.scoreValue.textContent = Math.floor(state.score).toString();
     ui.mapValue.textContent = getMapName();
-    ui.hpText.textContent = `${Math.ceil(p.hp)} / ${p.maxHp}`;
-    ui.shieldText.textContent = `${Math.ceil(p.shield)} / ${p.maxShield}`;
-    ui.xpText.textContent = `${Math.floor(p.xp)} / ${p.xpToNext}`;
-    ui.hpFill.style.width = `${clamp((p.hp / p.maxHp) * 100, 0, 100)}%`;
-    ui.shieldFill.style.width = `${clamp((p.shield / p.maxShield) * 100, 0, 100)}%`;
     ui.xpFill.style.width = `${clamp((p.xp / p.xpToNext) * 100, 0, 100)}%`;
-    updateActiveSkillHud(p);
     updateUiState();
   }
 
-  function updateActiveSkillHud(p) {
-    const skill = getActiveSkill(p.activeSkillId);
-    if (!skill) {
-      ui.activeSkillName.textContent = t("hud.activeNone");
-      ui.activeSkillText.textContent = t("hud.activeAcquire");
-      ui.activeSkillFill.style.width = "0%";
-      return;
-    }
-    ui.activeSkillName.textContent = `${getActiveSkillName(skill)} ${t("common.levelShort")}${p.activeSkillLevel}`;
+  function getActiveSkillChargeState(p) {
+    if (!p || !p.activeSkillId) return { ready: false, priming: false, intensity: 0 };
     normalizeActiveSkillState(p);
-    if (isActiveSkillReady(p)) {
-      ui.activeSkillText.textContent = t("hud.activeReady");
-      ui.activeSkillFill.style.width = "100%";
-      return;
-    }
-    const progress = p.activeCooldownMax > 0 ? 1 - p.activeCooldown / p.activeCooldownMax : 0;
-    ui.activeSkillText.textContent = `${Math.ceil(p.activeCooldown)}s`;
-    ui.activeSkillFill.style.width = `${clamp(progress * 100, 0, 100)}%`;
+    const ready = p.activeCharges > 0 && p.activeCooldown <= 0;
+    if (ready) return { ready: true, priming: false, intensity: 1 };
+    const remaining = Math.max(0, p.activeCooldown);
+    if (remaining > 3) return { ready: false, priming: false, intensity: 0 };
+    const intensity = clamp(1 - Math.floor(Math.ceil(remaining)) / 3 + 1 / 3, 0.34, 1);
+    return { ready: false, priming: true, intensity };
   }
 
   function updateUiState() {
     const p = state.player;
     const bossActive = state.enemies.some(enemy => enemy.type === "boss");
+    const charge = getActiveSkillChargeState(p);
     gameShell.classList.toggle("is-critical", Boolean(p && p.hp / p.maxHp < 0.3));
     gameShell.classList.toggle("is-boss-alert", bossActive);
     gameShell.classList.toggle("is-shield-down", Boolean(p && p.shield <= 0));
-    gameShell.classList.toggle("is-active-ready", isActiveSkillReady(p));
-    gameShell.classList.toggle("is-active-cooling", Boolean(p && p.activeSkillId && !isActiveSkillReady(p)));
+    gameShell.classList.toggle("is-active-ready", charge.ready);
+    gameShell.classList.toggle("is-active-priming", charge.priming);
+    gameShell.style.setProperty("--active-edge-opacity", (0.18 + charge.intensity * 0.58).toFixed(2));
+    gameShell.style.setProperty("--active-edge-size", `${Math.round(24 + charge.intensity * 40)}px`);
   }
 
   function getMoveVector() {
@@ -1939,19 +1916,51 @@
       const category = document.createElement("span");
       const name = document.createElement("strong");
       const description = document.createElement("p");
-      const current = getSkillLevel(skill.id);
+      const current = getUpgradeCurrentLevel(skill);
       button.className = "upgrade-card";
       button.type = "button";
       button.dataset.rarity = skill.rarity || "common";
       category.textContent = getSkillCategory(skill);
       name.textContent = getSkillName(skill);
       description.textContent = getSkillDescription(skill, current);
-      button.append(category, name, description);
+      button.append(category, name, createSkillProgress(skill, current), description);
       button.addEventListener("click", () => selectUpgrade(skill));
       ui.upgradeOptions.appendChild(button);
     });
     setMode("levelUp");
     playSound("level");
+  }
+
+  function getUpgradeCurrentLevel(skill) {
+    if (skill.sourceActiveId) return state.player.activeSkillLevel;
+    if (skill.id && skill.id.startsWith("active-")) return 0;
+    return getSkillLevel(skill.id);
+  }
+
+  function createSkillProgress(skill, current) {
+    const max = skill.max || 1;
+    const progress = document.createElement("div");
+    const track = document.createElement("div");
+    const fill = document.createElement("i");
+    const label = document.createElement("em");
+    const nextLevel = Math.min(current + 1, max);
+    progress.className = "skill-progress";
+    progress.setAttribute("aria-label", t("skill.progressLabel"));
+    progress.style.setProperty("--skill-progress", `${Math.round((current / max) * 100)}%`);
+    progress.style.setProperty("--segments", max);
+    track.className = "skill-progress-track";
+    fill.className = "skill-progress-fill";
+    label.className = "skill-progress-label";
+    label.textContent = current >= max ? t("common.maxed") : `${t("common.levelShort")}${nextLevel}`;
+    track.appendChild(fill);
+    for (let i = 0; i < max; i++) {
+      const pip = document.createElement("b");
+      if (i < current) pip.className = "is-filled";
+      if (i === current && current < max) pip.className = "is-next";
+      track.appendChild(pip);
+    }
+    progress.append(track, label);
+    return progress;
   }
 
   function rollUpgrades() {
@@ -2131,6 +2140,7 @@
       drawEnemyProjectiles();
       drawEnemies();
       drawPlayer();
+      drawPlayerVitalArc();
       drawMouseTarget();
       drawActiveSkillRangeHint();
       drawParticles();
@@ -2419,13 +2429,14 @@
     const speedRatio = clamp(Math.hypot(p.vx, p.vy) / p.speed, 0, 1.4);
     const shieldRatio = clamp(p.shield / p.maxShield, 0, 1);
     const hpRatio = clamp(p.hp / p.maxHp, 0, 1);
+    const activeCharge = getActiveSkillChargeState(p);
     const flame = 18 + speedRatio * 24 + (motion.reduced ? 0 : Math.sin(state.elapsed * 18) * 4);
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.angle);
-    setGlow(artPalette.playerTrim, 18);
-    ctx.fillStyle = artPalette.playerHull;
-    ctx.strokeStyle = "rgba(72, 243, 255, 0.8)";
+    setGlow(activeCharge.ready ? "#ff5c66" : artPalette.playerTrim, activeCharge.ready ? 24 : 18);
+    ctx.fillStyle = activeCharge.ready ? "rgba(255, 92, 102, 0.78)" : artPalette.playerHull;
+    ctx.strokeStyle = activeCharge.ready ? "rgba(255, 164, 150, 0.82)" : "rgba(72, 243, 255, 0.8)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(28, 0);
@@ -2502,6 +2513,46 @@
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.pickupRange, 0, TAU);
     ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  function drawPlayerVitalArc() {
+    const p = state.player;
+    if (!p) return;
+    const hpRatio = clamp(p.hp / p.maxHp, 0, 1);
+    const shieldRatio = p.maxShield > 0 ? clamp(p.shield / p.maxShield, 0, 1) : 0;
+    const cx = p.x;
+    const cy = p.y;
+    const radius = p.radius + 24;
+    const shieldRadius = radius + 7;
+    const start = -Math.PI * 0.5;
+    const end = Math.PI * 0.5;
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.globalAlpha = 0.38;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.09)";
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, start, end);
+    ctx.stroke();
+    ctx.globalAlpha = 0.66;
+    ctx.strokeStyle = "rgba(255, 54, 91, 0.68)";
+    ctx.lineWidth = 6;
+    setGlow("#ff365b", hpRatio < 0.3 ? 18 : 10);
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, start, start + (end - start) * hpRatio);
+    ctx.stroke();
+    if (p.shield > 0) {
+      ctx.globalAlpha = 0.56;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+      ctx.lineWidth = 3.4;
+      setGlow("#ffffff", 12 + shieldRatio * 10);
+      ctx.beginPath();
+      ctx.arc(cx, cy, shieldRadius, start, start + (end - start) * shieldRatio);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
   }
 
@@ -3039,3 +3090,5 @@
   updateMenuState();
   requestAnimationFrame(loop);
 })();
+
+
