@@ -1,0 +1,25 @@
+{
+  "mode": "generate",
+  "model": "gpt-image-2-b",
+  "size_requested": "512x512",
+  "prompt": "top-down neon sci-fi arcade game skill icon for Ion Storm, gold and cyan lightning bolts striking a circular target reticle, clean centered silhouette, crisp glowing outline, readable at 48px, no text, no letters",
+  "source": "url",
+  "output": "assets/source/gpt-image2/active/ion-storm.png",
+  "image": {
+    "format": "png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1581729
+  },
+  "created": 1779271397,
+  "usage": {
+    "total_tokens": 4219,
+    "input_tokens": 44,
+    "output_tokens": 4175,
+    "input_tokens_details": {
+      "text_tokens": 44,
+      "image_tokens": 0
+    }
+  },
+  "revised_prompt": ""
+}

@@ -465,6 +465,11 @@ button {
   overflow: hidden;
   isolation: isolate;
   min-height: min(620px, calc(100svh - 104px));
+  background:
+    linear-gradient(90deg, rgba(0, 7, 16, 0.96) 0%, rgba(0, 11, 22, 0.88) 42%, rgba(2, 8, 18, 0.7) 100%),
+    radial-gradient(circle at 18% 0%, rgba(84, 247, 255, 0.14), transparent 30%),
+    radial-gradient(circle at 88% 14%, rgba(240, 92, 255, 0.16), transparent 32%),
+    url("assets/images/menu/hero.webp") center / cover no-repeat;
 }
 
 .hero-panel::after {
@@ -851,6 +856,30 @@ h2 {
   background: linear-gradient(90deg, transparent, rgba(72, 243, 255, 0.1), transparent);
   transform: translateX(-110%);
   pointer-events: none;
+}
+
+.upgrade-card.has-icon {
+  padding-right: 102px;
+}
+
+.upgrade-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border: 1px solid rgba(84, 247, 255, 0.34);
+  background: rgba(2, 9, 17, 0.62);
+  box-shadow: 0 0 24px rgba(84, 247, 255, 0.14), inset 0 0 18px rgba(255, 255, 255, 0.035);
+  clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+}
+
+.upgrade-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .upgrade-card:hover::before,
@@ -1247,6 +1276,15 @@ h2 {
 
   .upgrade-card {
     min-height: 0;
+  }
+
+  .upgrade-card.has-icon {
+    padding-right: 86px;
+  }
+
+  .upgrade-icon {
+    width: 58px;
+    height: 58px;
   }
 }
 

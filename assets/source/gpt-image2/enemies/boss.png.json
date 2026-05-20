@@ -1,0 +1,25 @@
+{
+  "mode": "generate",
+  "model": "gpt-image-2-b",
+  "size_requested": "512x512",
+  "prompt": "top-down enemy mothership sprite for Void Mothership boss, huge magenta black hostile flagship, radial spines, central void core, threatening readable silhouette, centered orthographic game asset on pure black background, no text, no UI, no frame",
+  "source": "url",
+  "output": "assets/source/gpt-image2/enemies/boss.png",
+  "image": {
+    "format": "png",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1509650
+  },
+  "created": 1779273630,
+  "usage": {
+    "total_tokens": 4224,
+    "input_tokens": 49,
+    "output_tokens": 4175,
+    "input_tokens_details": {
+      "text_tokens": 49,
+      "image_tokens": 0
+    }
+  },
+  "revised_prompt": ""
+}
