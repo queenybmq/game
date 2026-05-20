@@ -32,20 +32,7 @@
       </div>
 
       <div class="hud-bottom">
-        <div class="meter-group">
-          <div class="meter-label"><span>艦體</span><strong id="hpText">100 / 100</strong></div>
-          <div class="meter"><div id="hpFill" class="meter-fill hp-fill"></div></div>
-        </div>
-        <div class="meter-group">
-          <div class="meter-label"><span>護盾</span><strong id="shieldText">60 / 60</strong></div>
-          <div class="meter"><div id="shieldFill" class="meter-fill shield-fill"></div></div>
-        </div>
-        <div class="meter-group active-meter-group">
-          <div class="meter-label"><span id="activeSkillName">主動技能未同步</span><strong id="activeSkillText">左鍵</strong></div>
-          <div class="meter"><div id="activeSkillFill" class="meter-fill active-fill"></div></div>
-        </div>
-        <div class="meter-group xp-meter-group">
-          <div class="meter-label"><span>同步經驗</span><strong id="xpText">0 / 20</strong></div>
+        <div class="meter-group xp-meter-group" aria-label="Experience">
           <div class="meter"><div id="xpFill" class="meter-fill xp-fill"></div></div>
         </div>
       </div>
@@ -62,43 +49,25 @@
         </select>
       </div>
       <div class="hero-panel">
-        <div class="menu-hero-copy">
+        <div class="menu-brand-block">
           <div class="menu-season-chip">
             <span data-i18n="menu.eyebrow">霓虹虚空生存</span>
             <strong>SECTOR 07</strong>
           </div>
           <h1 data-i18n="menu.title">星舰幸存者</h1>
-          <p class="lead" data-i18n="menu.lead">驾驶最后一艘星舰，在霓虹星海中突破蜂群、升级武装，挑战虚空母舰。</p>
-          <div class="control-grid">
-            <span data-i18n="menu.controlMove">鼠标指针牵引移动</span>
-            <span data-i18n="menu.controlAim">自动瞄准，自动射击</span>
-            <span data-i18n="menu.controlSkill">左键触发主动技能</span>
-            <span data-i18n="menu.controlPause">P / Esc 暂停</span>
-            <span data-i18n="menu.controlSettings">O 打开游戏设置</span>
-            <span data-i18n="menu.controlReturn">返回主菜单可保留战局</span>
-          </div>
-        </div>
-        <aside class="menu-command-deck" aria-label="Main menu actions">
-          <div class="menu-command-header">
-            <p class="eyebrow">COMMAND</p>
-            <span>READY</span>
-          </div>
-          <div class="menu-actions">
-            <button id="startButton" class="primary-button" data-i18n="menu.start">开始新游戏</button>
-            <button id="continueButton" class="secondary-button" disabled data-i18n="menu.continue">继续游戏</button>
-            <button id="settingsButton" class="secondary-button" data-i18n="menu.settings">游戏设置</button>
-          </div>
           <div class="menu-records">
             <span><span data-i18n="records.bestScore">最高分</span> <strong id="menuBestScore">0</strong></span>
             <span><span data-i18n="records.bestTime">最长生存</span> <strong id="menuBestTime">00:00</strong></span>
             <span><span data-i18n="records.bestKills">最高击杀</span> <strong id="menuBestKills">0</strong></span>
           </div>
-        </aside>
-        <div class="menu-status-strip" aria-hidden="true">
-          <span>VOID CARRIER SIGNAL</span>
-          <strong>91%</strong>
-          <span>WEAPON CORE ONLINE</span>
         </div>
+        <aside class="menu-command-deck" aria-label="Main menu actions">
+          <div class="menu-actions">
+            <button id="startButton" class="primary-button" data-i18n="menu.start">开始新游戏</button>
+            <button id="continueButton" class="secondary-button" disabled data-i18n="menu.continue">继续游戏</button>
+            <button id="settingsButton" class="secondary-button" data-i18n="menu.settings">游戏设置</button>
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -164,6 +133,17 @@
             <span data-i18n="settings.autoPerf">自動降低特效壓力</span>
             <input id="autoPerfToggle" type="checkbox" checked>
           </label>
+        </div>
+        <div class="tutorial-panel">
+          <p class="eyebrow" data-i18n="settings.tutorial">游戏教程</p>
+          <div class="control-grid">
+            <span data-i18n="menu.controlMove">鼠标指针牵引移动</span>
+            <span data-i18n="menu.controlAim">自动瞄准，自动射击</span>
+            <span data-i18n="menu.controlSkill">左键触发主动技能</span>
+            <span data-i18n="menu.controlPause">P / Esc 暂停</span>
+            <span data-i18n="menu.controlSettings">O 打开游戏设置</span>
+            <span data-i18n="menu.controlReturn">返回主菜单可保留战局</span>
+          </div>
         </div>
         <div class="menu-actions compact-actions">
           <button id="settingsBackButton" class="primary-button" data-i18n="common.back">返回</button>
